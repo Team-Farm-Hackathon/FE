@@ -1,73 +1,202 @@
-# React + TypeScript + Vite
+# 상인의 법칙 (The Merchant's Code) — FE
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+중세 상인이 되어 협력과 배신 사이에서 살아남는 **게임이론 인터랙티브 스토리게임**입니다.
+React로 만든 웹 게임이고, 백엔드 없이 프론트엔드만으로 동작합니다.
 
-Currently, two official plugins are available:
+- **배포 주소**: https://team-farm-hackathon.github.io/FE/
+- **플랫폼**: 웹 (PC / 모바일 반응형)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 0. 먼저 알아둘 것 — 이 프로젝트가 쓰는 기술
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+코드를 열었을 때 "이게 다 뭐지?" 싶지 않도록, 핵심 도구를 한 줄씩 정리했습니다.
+(자세히 몰라도 됩니다. "각자 무슨 역할인지"만 감 잡으면 충분합니다.)
 
-## Expanding the ESLint configuration
+| 이름 | 한 줄 설명 | 비유 |
+|------|-----------|------|
+| **React** | 화면(UI)을 "컴포넌트"라는 조각 단위로 만드는 라이브러리 | 레고 블록으로 화면을 조립 |
+| **Vite** | 개발 서버를 띄우고, 배포용으로 코드를 묶어주는(빌드) 도구 | 파이썬의 실행환경 + 빌더 역할 |
+| **TypeScript** | JavaScript에 "타입"을 더해 오타·실수를 미리 잡아주는 언어 | 타입 힌트 붙은 파이썬 |
+| **zustand** | 게임 상태(골드·평판·진행도 등)를 여러 화면이 함께 쓰도록 보관하는 곳 | 전역 변수 보관함 (단, 안전하게) |
+| **Tailwind CSS** | `class` 이름만 붙여서 스타일을 빠르게 입히는 CSS 도구 | 미리 만들어진 스타일 스티커 |
+| **motion** | 버튼·숫자·카드 등에 애니메이션을 주는 라이브러리 | 움직임 담당 |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+> **"라이브러리"란?** 남이 미리 만들어 둔 코드 묶음입니다. 파이썬에서 `import pandas` 하듯,
+> 여기서도 필요한 라이브러리를 설치해서 가져다 씁니다.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 1. 처음 한 번만 — 개발 환경 세팅
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+> 이 단계는 **처음 1회만** 합니다. 한 번 해두면 다음부터는 2번으로 바로 갑니다.
+
+### 1-1. Node.js 설치 (이미 있으면 건너뛰기)
+
+이 프로젝트는 **Node.js**라는 실행 환경 위에서 돌아갑니다. (파이썬 코드를 돌리려면 파이썬이
+깔려 있어야 하듯, 이건 JavaScript용입니다.)
+
+먼저 깔려 있는지 확인 — 터미널(명령 프롬프트)에 입력:
+
+```bash
+node -v
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+`v20.19.0` 처럼 버전 번호가 나오면 이미 있는 겁니다. **`v20` 이상이면 OK.**
+"명령을 찾을 수 없음" 류의 에러가 나면 아래에서 설치하세요.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **설치 링크**: https://nodejs.org → **LTS** 버전 다운로드 후 설치
+- 설치 후 터미널을 **새로 켜서** `node -v`를 다시 확인하세요. (기존 터미널엔 반영 안 됨)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1-2. pnpm 설치 (이미 있으면 건너뛰기)
+
+이 프로젝트는 패키지 매니저로 **pnpm**을 씁니다. (`npm`의 더 빠른 사촌이라고 보면 됩니다.)
+
+확인:
+
+```bash
+pnpm -v
+```
+
+버전이 안 나오면 설치 (Node가 깔려 있으면 이 한 줄로 됩니다):
+
+```bash
+npm install -g pnpm
+```
+
+> ⚠️ **중요**: 이 프로젝트에서는 `npm install`이 아니라 **`pnpm install`**을 씁니다.
+> `npm`과 `pnpm`을 섞으면 설정 파일이 꼬입니다. 항상 `pnpm`으로 통일하세요.
+
+### 1-3. 코드 받아오기 (클론)
+
+원하는 폴더에서:
+
+```bash
+git clone https://github.com/Team-Farm-Hackathon/FE.git
+cd FE
+```
+
+### 1-4. 라이브러리 설치
+
+`FE` 폴더 안에서:
+
+```bash
+pnpm install
+```
+
+프로젝트가 쓰는 라이브러리(React, zustand 등)를 한 번에 내려받습니다. 처음엔 1~2분 걸릴 수 있어요.
+끝나면 `node_modules`라는 폴더가 생기는데, 이건 설치된 라이브러리 모음이라 **건드릴 필요 없고
+GitHub에도 안 올라갑니다.**
+
+---
+
+## 2. 매일 쓰는 명령어
+
+모두 `FE` 폴더 안에서 실행합니다.
+
+### `pnpm dev` — 개발 서버 (가장 자주 씀)
+
+```bash
+pnpm dev
+```
+
+- 로컬에 게임을 띄웁니다. 터미널에 `http://localhost:5173/FE/` 같은 주소가 뜨면 브라우저로 접속.
+- **코드를 고치고 저장하면 화면이 자동으로 즉시 바뀝니다.** (새로고침 불필요)
+- 끌 때는 터미널에서 `Ctrl + C`.
+
+### `pnpm build` — 배포용 빌드 확인
+
+```bash
+pnpm build
+```
+
+- 실제 배포에 쓸 형태로 코드를 묶습니다. 에러 없이 끝나는지 확인하는 용도.
+- 배포 전에 한 번 돌려보면, 문제를 미리 거를 수 있습니다.
+
+### `pnpm run deploy` — 실제 배포 ⚠️
+
+```bash
+pnpm run deploy
+```
+
+- 빌드한 결과물을 GitHub Pages(위의 배포 주소)에 올립니다.
+- 1~2분 뒤 배포 주소에 반영됩니다.
+- **아래 "협업 규칙"을 꼭 읽고 쓰세요.** 아무나 막 돌리면 사고가 납니다.
+
+> `deploy`만 쓰면 pnpm이 다른 내장 명령으로 오해해서 에러가 납니다.
+> 반드시 **`pnpm run deploy`** 처럼 `run`을 붙이세요.
+
+---
+
+## 3. 협업 규칙 (2인)
+
+거창한 템플릿은 없습니다. 아래 4가지만 지키면 충돌 없이 굴러갑니다.
+
+### 3-1. 기능별 브랜치로 작업
+
+`main`에 직접 올리지 말고, 기능마다 브랜치를 따서 작업 → PR로 합칩니다.
+
+```bash
+git checkout -b feat/작업이름     # 예: feat/trade-screen
+# ... 작업 ...
+git add .
+git commit -m "feat: 거래 선택 화면 구현"
+git push -u origin feat/작업이름
+```
+
+그다음 GitHub에서 **Pull Request**를 올리면 됩니다. PR 본문은 한두 줄로 "뭐 했는지"만 적으면 충분.
+
+### 3-2. 커밋 메시지 접두어
+
+| 접두어 | 의미 |
+|--------|------|
+| `feat:` | 새 기능 |
+| `fix:` | 버그 수정 |
+| `style:` | 디자인/스타일만 변경 |
+| `docs:` | 문서 변경 |
+| `chore:` | 설정·잡일 |
+
+예: `feat: 추리 화면 추가`, `fix: 평판 계산 오류 수정`
+
+### 3-3. 상태 보관함(zustand store)은 함께 설계
+
+골드·평판·진행도 등은 `store`라는 공통 파일에 모입니다. 양쪽 작업이 다 여기에 의존하므로,
+**구조를 바꿀 땐 먼저 상의**하세요. 각자 멋대로 고치면 충돌이 제일 크게 납니다.
+
+### 3-4. 배포는 한 사람만 ⚠️
+
+`pnpm run deploy`를 두 명이 동시에 돌리면 서로의 배포를 덮어씁니다.
+**배포는 프론트엔드 담당이 전담**하고, 다른 팀원은 `pnpm dev`로 로컬 확인만 하는 것을 권장합니다.
+배포는 항상 `main`에 최신 코드가 합쳐진 뒤에 하세요.
+
+---
+
+## 4. 자주 막히는 부분 (FAQ)
+
+**Q. `pnpm`이 명령을 못 찾는다고 나와요.**
+A. Node.js → pnpm 순서로 설치됐는지 확인하고, 터미널을 새로 켜보세요. (설치 후 기존 터미널엔 반영 안 됨)
+
+**Q. `pnpm install`이 에러 나요.**
+A. `FE` 폴더 안에서 실행했는지 확인하세요. (`cd FE` 후 실행)
+
+**Q. 화면이 흰색이거나 안 떠요.**
+A. 브라우저에서 `F12`(개발자도구) → Console 탭에 빨간 에러가 있는지 보세요. 캡처해서 공유하면 빠릅니다.
+
+**Q. 내 코드가 GitHub에 안 보여요.**
+A. `pnpm run deploy`는 *배포*만 합니다. 소스 코드를 GitHub에 남기려면 `git push`를 따로 해야 합니다.
+
+---
+
+## 5. 폴더 구조 (참고)
+
+```
+FE/
+├─ public/          # favicon 등 정적 파일 (그대로 복사됨)
+├─ src/             # 실제 게임 코드
+│  ├─ components/   # 재사용 화면 조각
+│  ├─ store/        # zustand 상태 보관함 (골드·평판 등)
+│  └─ ...
+├─ index.html       # 페이지 뼈대 + 메타태그
+├─ vite.config.ts   # Vite 설정 (배포 경로 base 포함)
+└─ package.json     # 라이브러리 목록 + 명령어(scripts)
 ```
