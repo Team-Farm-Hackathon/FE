@@ -2,7 +2,10 @@ import { create } from "zustand";
 import type { PayoffResult } from "../types/game";
 
 
+type Screen = "onboarding" | "playing" | "ending";
+
 type GameState = {
+  screen: Screen;
   gold: number;
   reputation: number;
   currentStage: number;
@@ -10,12 +13,14 @@ type GameState = {
   goToStage: (stage: number) => void;
   nextStage: () => void;
   reset: () => void;
+  setScreen: (s: Screen) => void;
 };
 
 export const useGameStore = create<GameState>((set) => ({
   gold: 0,
   reputation: 50,
   currentStage: 1,
+  screen: "onboarding",
 
   applyTradeResult: ({ goldDelta, repDelta }) =>
     set((s) => ({
@@ -25,5 +30,7 @@ export const useGameStore = create<GameState>((set) => ({
 
   goToStage: (stage) => set({ currentStage: stage }),
   nextStage: () => set((s) => ({ currentStage: s.currentStage + 1 })),
-  reset: () => set({ gold: 0, reputation: 50, currentStage: 1 }),
+  setScreen: (screen) => set({ screen }),
+  reset: () =>
+    set({ gold: 0, reputation: 50, currentStage: 1, screen: "onboarding" }),
 }));

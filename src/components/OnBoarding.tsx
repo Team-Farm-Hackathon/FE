@@ -51,7 +51,7 @@ export default function Onboarding({
           <span>
             ENDINGS {endingsCleared}/{endingsTotal}
           </span>
-          <span>? GAME THEORY 10s</span>
+          <span> GAME THEORY 10s</span>
         </div>
       </div>
     </div>
