@@ -41,7 +41,8 @@ export type Npc = {
   id: NpcId;
   name: string;
   title: string;
-  intro: string;
+  // 인트로 대사 (여러 줄)
+  intro: string[];
   strategy: Strategy;
 };
 

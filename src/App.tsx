@@ -1,5 +1,6 @@
 import Onboarding from "./components/OnBoarding";
 import GameScreen from "./components/game/GameScreen";
+import NpcIntro from "./components/game/NpcIntro";
 import { useGameStore } from "./store/useGameStore";
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
         <Onboarding onStart={() => setScreen("playing")} />
       )}
       {screen === "playing" && <GameScreen />}
+      {screen === "intro" && <NpcIntro />}
     </div>
   );
 }
