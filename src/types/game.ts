@@ -65,6 +65,26 @@ export type NpcTypeInfo = {
   icon: string;
 };
 
+export type EndingId = "sage" | "raider" | "naive" | "lunatic";
+
+export type Ending = {
+  id: EndingId;
+  name: string;
+  subtitle: string;
+  icon: string;
+  // 결말 메시지
+  message: string;
+};
+
+export type GameStats = {
+  finalGold: number;
+  finalReputation: number;
+  coopCount: number;
+  defectCount: number;
+  guessAttempts: number;
+  guessCorrect: number;
+};
+
 export type Round = {
   turn: number;
   myChoice: Choice;

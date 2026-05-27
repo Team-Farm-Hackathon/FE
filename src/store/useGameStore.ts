@@ -1,16 +1,19 @@
 import { create } from "zustand";
-import type {
-  Choice,
-  GameEvent,
-  NpcId,
-  NpcType,
-  PayoffResult,
-  Round,
+import {
+  CHOICE,
+  type Choice,
+  type EndingId,
+  type GameEvent,
+  type NpcId,
+  type NpcType,
+  type PayoffResult,
+  type Round,
 } from "../types/game";
 import { STAGES, pickNpcFromStage } from "../game/stages";
 import { NPCS } from "../game/npcs";
 import { calcPayoff, drawEvent } from "../game/payoff";
 import { decideOppMove } from "../game/strategies";
+import { evaluateEnding } from "../game/endings";
 
 type Screen =
   | "onboarding"
@@ -20,38 +23,59 @@ type Screen =
   | "guess"
   | "ending";
 
+const ENDINGS_STORAGE_KEY = "tit-for-tat:unlockedEndings";
+
+function loadUnlockedEndings(): EndingId[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(ENDINGS_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as EndingId[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveUnlockedEndings(endings: EndingId[]) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(ENDINGS_STORAGE_KEY, JSON.stringify(endings));
+  } catch {
+    // ignore
+  }
+}
+
 type GameState = {
   screen: Screen;
   gold: number;
   reputation: number;
-  // 현재 위치한 (또는 진입 중인) 스테이지
   currentStage: number;
-  // 해금된 가장 높은 스테이지 (기본 1)
   unlockedStage: number;
-  // 현재 거래 중인 NPC (스테이지 진입 시 풀에서 무작위로 결정)
   currentNpcId: NpcId | null;
-  // 현재 배틀의 라운드 히스토리
   battleHistory: Round[];
-  // 이번 라운드의 이벤트
   currentEvent: GameEvent | null;
-  // 직전 라운드 결과 (RoundResult 표시용)
   lastRoundPayoff: PayoffResult | null;
-  // 정답 맞춘 NPC 유형 기록 (선택사항: 도감/엔딩용)
   guessedTypes: NpcType[];
+  // 누적 통계 (엔딩 판정용)
+  coopCount: number;
+  defectCount: number;
+  guessAttempts: number;
+  guessCorrect: number;
+  // 마지막 클리어 시 결정된 엔딩
+  currentEnding: EndingId | null;
+  // 도감 (localStorage 영구 보존)
+  unlockedEndings: EndingId[];
 
-  // 액션
   setScreen: (s: Screen) => void;
   selectStage: (stage: number) => void;
-  // 라운드 1회 진행: 내 선택 → 상대 결정 → 페이오프 계산 → 히스토리/스토어 갱신
   playRound: (myChoice: Choice) => void;
-  // 다음 라운드 준비 (이벤트 새로 뽑기)
   prepareNextRound: () => void;
-  // 추리 제출 (정답 시 +5 골드, 오답 시 -3 평판, 건너뛰기는 null)
   submitGuess: (guess: NpcType | null) => boolean;
-  // 배틀/추리 종료 후 맵으로 복귀 (다음 스테이지 해금)
   returnToMap: () => void;
+  // 게임 데이터 리셋 — 도감은 유지
   reset: () => void;
 };
+
+const TOTAL_STAGES = STAGES.length;
 
 export const useGameStore = create<GameState>((set, get) => ({
   gold: 50,
@@ -64,6 +88,12 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentEvent: null,
   lastRoundPayoff: null,
   guessedTypes: [],
+  coopCount: 0,
+  defectCount: 0,
+  guessAttempts: 0,
+  guessCorrect: 0,
+  currentEnding: null,
+  unlockedEndings: loadUnlockedEndings(),
 
   setScreen: (screen) => set({ screen }),
 
@@ -81,8 +111,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   playRound: (myChoice) => {
-    const { currentNpcId, battleHistory, currentEvent, gold, reputation } =
-      get();
+    const {
+      currentNpcId,
+      battleHistory,
+      currentEvent,
+      gold,
+      reputation,
+      coopCount,
+      defectCount,
+    } = get();
     if (!currentNpcId) return;
 
     const npc = NPCS[currentNpcId];
@@ -100,42 +137,91 @@ export const useGameStore = create<GameState>((set, get) => ({
       lastRoundPayoff: payoff,
       gold: gold + payoff.goldDelta,
       reputation: Math.max(0, Math.min(100, reputation + payoff.repDelta)),
+      coopCount: coopCount + (myChoice === CHOICE.COOPERATE ? 1 : 0),
+      defectCount: defectCount + (myChoice === CHOICE.DEFECT ? 1 : 0),
     });
   },
 
   prepareNextRound: () => {
-    set({ currentEvent: drawEvent(), lastRoundPayoff: null });
+    set({ lastRoundPayoff: null });
   },
 
   submitGuess: (guess) => {
-    const { currentNpcId, gold, reputation, guessedTypes } = get();
+    const {
+      currentNpcId,
+      gold,
+      reputation,
+      guessedTypes,
+      guessAttempts,
+      guessCorrect,
+    } = get();
     if (!currentNpcId) return false;
 
-    // 건너뛰기: 페널티 없음
-    if (guess === null) {
-      set({ screen: "playing" });
-      return false;
-    }
+    // 건너뛰기: 페널티 없음, 통계에도 미반영
+    if (guess === null) return false;
 
     const correctType = NPCS[currentNpcId].type;
     const isCorrect = guess === correctType;
 
+    const updates: Partial<GameState> = {
+      guessAttempts: guessAttempts + 1,
+      guessCorrect: guessCorrect + (isCorrect ? 1 : 0),
+    };
+
     if (isCorrect) {
-      set({
-        gold: gold + 5,
-        guessedTypes: guessedTypes.includes(correctType)
-          ? guessedTypes
-          : [...guessedTypes, correctType],
-      });
+      updates.gold = gold + 5;
+      updates.guessedTypes = guessedTypes.includes(correctType)
+        ? guessedTypes
+        : [...guessedTypes, correctType];
     } else {
-      set({ reputation: Math.max(0, reputation - 3) });
+      updates.reputation = Math.max(0, reputation - 3);
     }
 
+    set(updates);
     return isCorrect;
   },
 
   returnToMap: () => {
-    const { currentStage, unlockedStage } = get();
+    const {
+      currentStage,
+      unlockedStage,
+      gold,
+      reputation,
+      coopCount,
+      defectCount,
+      guessAttempts,
+      guessCorrect,
+      unlockedEndings,
+    } = get();
+
+    // 마지막 스테이지(4) 클리어 → 엔딩 분기
+    if (currentStage >= TOTAL_STAGES) {
+      const endingId = evaluateEnding({
+        finalGold: gold,
+        finalReputation: reputation,
+        coopCount,
+        defectCount,
+        guessAttempts,
+        guessCorrect,
+      });
+
+      const nextUnlocked = unlockedEndings.includes(endingId)
+        ? unlockedEndings
+        : [...unlockedEndings, endingId];
+      saveUnlockedEndings(nextUnlocked);
+
+      set({
+        currentEnding: endingId,
+        unlockedEndings: nextUnlocked,
+        screen: "ending",
+        currentNpcId: null,
+        battleHistory: [],
+        currentEvent: null,
+        lastRoundPayoff: null,
+      });
+      return;
+    }
+
     set({
       unlockedStage: Math.max(unlockedStage, currentStage + 1),
       screen: "playing",
@@ -146,7 +232,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     });
   },
 
-  reset: () =>
+  reset: () => {
+    // 도감은 유지하고 게임 데이터만 초기화
+    const keepUnlocked = get().unlockedEndings;
     set({
       gold: 50,
       reputation: 50,
@@ -158,5 +246,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       currentEvent: null,
       lastRoundPayoff: null,
       guessedTypes: [],
-    }),
+      coopCount: 0,
+      defectCount: 0,
+      guessAttempts: 0,
+      guessCorrect: 0,
+      currentEnding: null,
+      unlockedEndings: keepUnlocked,
+    });
+  },
 }));

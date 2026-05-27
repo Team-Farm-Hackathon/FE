@@ -80,7 +80,7 @@ export const NPCS: Record<NpcId, Npc> = {
       "오늘도 좋은 하루 보내십시다.",
     ],
     strategy: "generousTitForTat",
-    type: "naiveType",
+    type: "avengerType",
     reactions: {
       CC: "따뜻한 거래, 따뜻한 빵.",
       CD: "괜찮습니다. 다음 빵은 더 맛있을 거예요.",
@@ -139,7 +139,7 @@ export const NPCS: Record<NpcId, Npc> = {
       "다시는 자네와 거래하지 않아.",
     ],
     strategy: "grudger",
-    type: "cheaterType",
+    type: "avengerType",
     reactions: {
       CC: "...괜찮군.",
       CD: "...기억해두지. 영원히.",
