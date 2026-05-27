@@ -22,7 +22,7 @@ export const STAGES: Stage[] = [
     areaLabel: "대도시",
     icon: "👑",
     npcPool: ["grudger", "avenger"],
-    rounds: 8,
+    rounds: 7,
   },
   // 어려움
   {
@@ -32,7 +32,7 @@ export const STAGES: Stage[] = [
     areaLabel: "변두리",
     icon: "🛒",
     npcPool: ["mentor", "wanderer"],
-    rounds: 6,
+    rounds: 5,
   },
   // 보통
   {

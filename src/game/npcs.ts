@@ -1,4 +1,4 @@
-import type { Npc, NpcId } from "../types/game";
+import type { Npc, NpcId, NpcType, NpcTypeInfo } from "../types/game";
 import {
   Naive,
   Cheater,
@@ -22,6 +22,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "당신도 좋은 분이시죠? 그렇죠?",
     ],
     strategy: "alwaysCooperate",
+    type: "naiveType",
+    reactions: {
+      CC: "역시! 좋은 거래였어요. 다음에 또 만나요.",
+      CD: "어... 왜 그러셨어요? 슬퍼요...",
+      DC: "괜찮아요, 다음엔 더 잘 부탁드려요!",
+      DD: "이런 일이 또 생기다니... 마음이 아파요.",
+    },
   },
   // [STAGE 1 · 시골 · 쉬움] 50/50 무작위 — 운에 의존, 평균치는 본전
   jester: {
@@ -34,6 +41,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "운이 좋길 빌어보시구려, 손님!",
     ],
     strategy: "random",
+    type: "jokerType",
+    reactions: {
+      CC: "운이 좋으셨네! 헤헤헤!",
+      CD: "어이쿠, 동전이 그쪽을 보고 웃었나봐!",
+      DC: "당했어! 하지만 재밌었지!",
+      DD: "푸하하! 우린 같은 부류였군!",
+    },
   },
 
   // [STAGE 2 · 마을 · 보통] 항상 배신 — 같이 배신해야 본전, 협력은 손해
@@ -47,6 +61,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "자, 지갑부터 좀 보여주시겠나?",
     ],
     strategy: "alwaysDefect",
+    type: "cheaterType",
+    reactions: {
+      CC: "...진심인가? 뭐, 나야 좋지.",
+      CD: "낄낄, 역시 호구는 호구야.",
+      DC: "어라? 제법인데?",
+      DD: "흥, 서로 알아본 셈이군.",
+    },
   },
   // [STAGE 2 · 마을 · 보통] 관대한 티탯 — 실수 한두 번은 용서, 협력 회복 가능
   baker: {
@@ -59,6 +80,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "오늘도 좋은 하루 보내십시다.",
     ],
     strategy: "generousTitForTat",
+    type: "naiveType",
+    reactions: {
+      CC: "따뜻한 거래, 따뜻한 빵.",
+      CD: "괜찮습니다. 다음 빵은 더 맛있을 거예요.",
+      DC: "사정이 있으셨겠지요, 신경 쓰지 마세요.",
+      DD: "조금 식은 빵을 드릴 수밖에 없겠군요.",
+    },
   },
 
   // [STAGE 3 · 변두리 · 어려움] 티탯 — 상대 직전 수를 따라함, 협력 유지가 핵심
@@ -72,6 +100,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "내 방식이 마음에 들길 바라네.",
     ],
     strategy: "titForTat",
+    type: "avengerType",
+    reactions: {
+      CC: "이게 신뢰일세. 잊지 말게.",
+      CD: "...실망이군. 다음엔 똑같이 갚지.",
+      DC: "내 차례인가. 받은 만큼만 돌려주는 것뿐일세.",
+      DD: "어리석은 짓이야, 우리 둘 다.",
+    },
   },
   // [STAGE 3 · 변두리 · 어려움] 파블로프 — 이기면 유지, 지면 반대로 전환
   wanderer: {
@@ -84,6 +119,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "내 노래는 매번 달라지지... 자, 시작해 볼까?",
     ],
     strategy: "pavlov",
+    type: "jokerType",
+    reactions: {
+      CC: "좋은 흐름이군. 이대로 가지.",
+      CD: "...흐름이 끊겼군. 곡조를 바꿔야겠어.",
+      DC: "오, 의외의 음이로군.",
+      DD: "엇박이군. 다음엔 다르게 가야지.",
+    },
   },
 
   // [STAGE 4 · 대도시 · 고난도] 그러저 — 한 번이라도 배신 시 영원히 배신
@@ -97,6 +139,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "다시는 자네와 거래하지 않아.",
     ],
     strategy: "grudger",
+    type: "cheaterType",
+    reactions: {
+      CC: "...괜찮군.",
+      CD: "...기억해두지. 영원히.",
+      DC: "이게 시작이야. 끝이 아니라.",
+      DD: "예상한 대로군.",
+    },
   },
   // [STAGE 4 · 대도시 · 고난도] 하드 그러저 — 2회 누적 배신 시 영원히 배신
   avenger: {
@@ -109,6 +158,13 @@ export const NPCS: Record<NpcId, Npc> = {
       "각오는 되어 있겠지?",
     ],
     strategy: "hardGrudger",
+    type: "avengerType",
+    reactions: {
+      CC: "...현명하군.",
+      CD: "한 번은 봐준다. 두 번째는 없다.",
+      DC: "이걸로 끝낼 줄 아나?",
+      DD: "역시. 세상에 믿을 놈은 없지.",
+    },
   },
 };
 
@@ -121,4 +177,32 @@ export const NPC_ICON: Record<NpcId, string> = {
   jester: Jester,
   wanderer: Wanderer,
   baker: Baker,
+};
+
+// 추리 카드용 4가지 유형 정보
+export const NPC_TYPES: Record<NpcType, NpcTypeInfo> = {
+  naiveType: {
+    id: "naiveType",
+    name: "순진이",
+    description: "무조건 협력. 의심 없이 손을 내미는 자.",
+    icon: "🤝",
+  },
+  cheaterType: {
+    id: "cheaterType",
+    name: "사기꾼",
+    description: "무조건 배신. 신뢰는 그의 사전에 없다.",
+    icon: "🗡",
+  },
+  avengerType: {
+    id: "avengerType",
+    name: "복수자",
+    description: "상대가 한 대로 돌려준다. 정의의 저울.",
+    icon: "⚖",
+  },
+  jokerType: {
+    id: "jokerType",
+    name: "변덕쟁이",
+    description: "무작위. 그조차 자신을 모른다.",
+    icon: "🎲",
+  },
 };

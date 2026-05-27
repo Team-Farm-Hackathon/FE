@@ -4,7 +4,7 @@ import StageNode from "./StageNode";
 import { Map } from "../../assets";
 
 export default function StageMap() {
-  const currentStage = useGameStore((s) => s.currentStage);
+  const unlockedStage = useGameStore((s) => s.unlockedStage);
   const selectStage = useGameStore((s) => s.selectStage);
 
   return (
@@ -18,9 +18,9 @@ export default function StageMap() {
       <div className="relative z-10 grid h-full w-full grid-rows-4">
         {STAGES.map((stage) => {
           const status =
-            stage.id < currentStage
+            stage.id < unlockedStage
               ? "cleared"
-              : stage.id === currentStage
+              : stage.id === unlockedStage
                 ? "current"
                 : "locked";
 

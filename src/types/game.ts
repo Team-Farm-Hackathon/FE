@@ -37,6 +37,9 @@ export type NpcId =
   | "wanderer"
   | "baker";
 
+// 추리 게임용 전략 유형 카테고리 (NPC 8명을 4분류로 묶음)
+export type NpcType = "naiveType" | "cheaterType" | "avengerType" | "jokerType";
+
 export type Npc = {
   id: NpcId;
   name: string;
@@ -44,6 +47,22 @@ export type Npc = {
   // 인트로 대사 (여러 줄)
   intro: string[];
   strategy: Strategy;
+  // 추리 카드에서 정답으로 묶이는 유형
+  type: NpcType;
+  // 라운드 결과별 반응 대사 (CC: 둘 다 협력, CD: 나 협력/상대 배신, DC: 나 배신/상대 협력, DD: 둘 다 배신)
+  reactions: {
+    CC: string;
+    CD: string;
+    DC: string;
+    DD: string;
+  };
+};
+
+export type NpcTypeInfo = {
+  id: NpcType;
+  name: string;
+  description: string;
+  icon: string;
 };
 
 export type Round = {
