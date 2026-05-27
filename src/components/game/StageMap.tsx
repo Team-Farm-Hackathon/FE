@@ -5,7 +5,7 @@ import { Map } from "../../assets";
 
 export default function StageMap() {
   const currentStage = useGameStore((s) => s.currentStage);
-  const goToStage = useGameStore((s) => s.goToStage);
+  const selectStage = useGameStore((s) => s.selectStage);
 
   return (
     <div className="relative flex w-full flex-1 flex-col overflow-y-auto">
@@ -36,7 +36,7 @@ export default function StageMap() {
               <StageNode
                 stage={stage}
                 status={status}
-                onClick={() => goToStage(stage.id)}
+                onClick={() => selectStage(stage.id)}
               />
             </section>
           );
