@@ -19,7 +19,7 @@ export default function RightPage({
 }: {
   npc: Npc;
   icon: string;
-  tier: "I" | "II" | "III";
+  tier: "I" | "II" | "III" | "IV";
   phase: Phase;
   history: Round[];
   payoff: PayoffResult | null;
