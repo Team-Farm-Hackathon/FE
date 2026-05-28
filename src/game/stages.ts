@@ -11,48 +11,54 @@ export type Stage = {
   // 진입 시 이 풀에서 1명이 무작위로 호출됨 (재플레이성)
   npcPool: NpcId[];
   rounds: number;
+  // 한 스테이지 안의 분기 노드 개수. 플레이어는 그 중 1개를 선택하여 진행한다.
+  nodeCount: number;
 };
 
 export const STAGES: Stage[] = [
-  // 고난도
+  // 보스 · 노드 1
   {
     id: 4,
     name: "왕의 알현",
     area: "city",
-    areaLabel: "대도시",
+    areaLabel: "궁전",
     icon: "👑",
-    npcPool: ["grudger", "avenger"],
+    npcPool: ["king", "noblewoman", "jester"],
     rounds: 7,
+    nodeCount: 1,
   },
-  // 어려움
+  // 어려움 · 노드 3
   {
     id: 3,
     name: "장터의 흥정",
     area: "outskirts",
-    areaLabel: "변두리",
+    areaLabel: "도시",
     icon: "🛒",
-    npcPool: ["mentor", "jester"],
+    npcPool: ["mercenary", "guildmaster", "mentor", "grudger", "avenger"],
     rounds: 5,
+    nodeCount: 3,
   },
-  // 보통
+  // 보통 · 노드 2
   {
     id: 2,
-    name: "농민과의 거래",
+    name: "마을에서의 거래",
     area: "village",
     areaLabel: "마을",
     icon: "🪙",
-    npcPool: ["cheater", "wanderer"],
+    npcPool: ["bard", "baker", "wanderer", "cheater"],
     rounds: 5,
+    nodeCount: 2,
   },
-  // 쉬움
+  // 튜토리얼 · 노드 1
   {
     id: 1,
     name: "첫 거래",
     area: "country",
     areaLabel: "시골",
     icon: "🌱",
-    npcPool: ["naive", "baker"],
-    rounds: 5,
+    npcPool: ["naive"],
+    rounds: 3,
+    nodeCount: 1,
   },
 ];
 

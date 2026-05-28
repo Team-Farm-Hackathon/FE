@@ -8,11 +8,11 @@ export default function StageMap() {
   const selectStage = useGameStore((s) => s.selectStage);
 
   return (
-    <div className="relative flex w-full flex-1 flex-col overflow-y-auto">
+    <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden">
       <img
         src={Map}
         alt="map"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-contain"
       />
 
       <div className="relative z-10 grid h-full w-full grid-rows-4">
@@ -29,7 +29,7 @@ export default function StageMap() {
               key={stage.id}
               className="relative flex w-full items-center justify-center"
             >
-              <span className="absolute left-3 top-3 bg-[#1a1108]/80 px-2 py-0.5 text-[10px] tracking-widest text-[#e8b86b]">
+              <span className="absolute top-3 left-3 bg-[#1a1108]/80 px-2 py-0.5 text-[10px] tracking-widest text-[#e8b86b]">
                 {stage.areaLabel}
               </span>
 

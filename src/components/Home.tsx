@@ -28,7 +28,7 @@ export default function Home() {
   const totalRounds = coopCount + defectCount;
   const coopRate = totalRounds > 0 ? Math.round((coopCount / totalRounds) * 100) : 0;
   const defectRate = totalRounds > 0 ? 100 - coopRate : 0;
-  const reputationDelta = reputation - 50;
+
   const dexCleared = guessedTypes.length;
   const dexTotal = 4;
   const hasProgress = unlockedStage > 1 || totalRounds > 0;
@@ -84,13 +84,12 @@ export default function Home() {
             나의 평판
           </p>
           <p className="mt-3 text-4xl text-[#e8b86b] md:text-5xl">
-            {reputationDelta >= 0 ? "+" : ""}
-            {reputationDelta}
+            {reputation}
           </p>
           <p className="mt-2 text-xs text-[#a88a5a] md:text-sm">
-            {reputationDelta >= 10
+            {reputation >= 70
               ? "믿을 만한 자라 불리기 시작했다."
-              : reputationDelta >= 0
+              : reputation >= 40
                 ? "이름이 조금씩 알려지고 있다."
                 : "신뢰를 잃어가고 있다."}
           </p>

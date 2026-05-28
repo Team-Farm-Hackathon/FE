@@ -35,7 +35,12 @@ export type NpcId =
   | "avenger"
   | "jester"
   | "wanderer"
-  | "baker";
+  | "baker"
+  | "bard"
+  | "mercenary"
+  | "guildmaster"
+  | "king"
+  | "noblewoman";
 
 // 추리 게임용 전략 유형 카테고리 (NPC 8명을 4분류로 묶음)
 export type NpcType = "naiveType" | "cheaterType" | "avengerType" | "jokerType";
