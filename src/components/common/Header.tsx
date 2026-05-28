@@ -13,19 +13,19 @@ export default function Header({ stageName = "여정의 길" }: HeaderProps) {
 
   return (
     <header
-      className="flex items-center justify-between w-full px-6 py-3 bg-[#2a1d11] border-b-4 border-[#1a1108]"
+      className="flex w-full items-center justify-between border-b-4 border-[#1a1108] bg-[#2a1d11] px-4 py-3 pl-16 md:px-6 md:pl-6"
       style={{ imageRendering: "pixelated", fontFamily: '"Press Start 2P", monospace' }}
     >
       <div className="flex flex-col leading-tight">
-        <span className="text-[#e8b86b] text-2xl tracking-widest drop-shadow-[2px_2px_0_#000]">
+        <span className="text-lg tracking-widest text-[#e8b86b] drop-shadow-[2px_2px_0_#000] md:text-2xl">
           STAGE {currentStage}
         </span>
-        <span className="text-[#8a6a3d] text-sm mt-1 tracking-wider">
+        <span className="mt-1 text-xs tracking-wider text-[#8a6a3d] md:text-sm">
           {stageName}
         </span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 md:gap-3">
         <Stat icon={Coin} value={gold} iconAlt="gold" />
         <Stat icon={Star} value={reputation} iconAlt="reputation" />
       </div>

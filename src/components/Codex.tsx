@@ -37,19 +37,21 @@ export default function Codex() {
   return (
     <>
       <Header />
-      <div className="flex flex-col gap-6 p-6">
+      <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
         {/* 도감 헤더 */}
-        <div className="relative overflow-hidden rounded-lg border border-[#3a2a1c] bg-gradient-to-br from-[#2a1d11] to-[#1a1208] p-8">
-          <p className="text-xs tracking-[0.4em] text-[#8a6a3d]">
+        <div className="relative overflow-hidden rounded-lg border border-[#3a2a1c] bg-linear-to-br from-[#2a1d11] to-[#1a1208] p-6 md:p-8">
+          <p className="text-[10px] tracking-[0.4em] text-[#8a6a3d] md:text-xs">
             COLLECTION · 도감
           </p>
-          <h1 className="mt-3 text-4xl text-[#e8b86b]">상인의 기록</h1>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#a88a5a]">
+          <h1 className="mt-3 text-3xl text-[#e8b86b] md:text-4xl">
+            상인의 기록
+          </h1>
+          <p className="mt-3 max-w-xl text-xs leading-relaxed text-[#a88a5a] md:text-sm">
             거래의 흔적은 사라지지 않는다. 마주친 자들과 걸어온 길이 이곳에
             쌓인다.
           </p>
 
-          <div className="mt-6 flex gap-8 text-xs tracking-[0.3em] text-[#8a6a3d]">
+          <div className="mt-5 flex flex-wrap gap-4 text-[10px] tracking-[0.3em] text-[#8a6a3d] md:mt-6 md:gap-8 md:text-xs">
             <span>
               ENDINGS · {unlockedEndings.length} / {ENDING_ORDER.length}
             </span>
@@ -60,20 +62,22 @@ export default function Codex() {
         </div>
 
         {/* 엔딩 섹션 */}
-        <section className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-8">
-          <div className="mb-6 flex items-end justify-between">
+        <section className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:p-8">
+          <div className="mb-5 flex items-end justify-between md:mb-6">
             <div>
-              <p className="text-xs tracking-[0.3em] text-[#6a4e2d]">
+              <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
                 ENDINGS
               </p>
-              <h2 className="mt-2 text-2xl text-[#e8b86b]">걸어온 길</h2>
+              <h2 className="mt-2 text-xl text-[#e8b86b] md:text-2xl">
+                걸어온 길
+              </h2>
             </div>
-            <p className="text-xs tracking-[0.3em] text-[#6a4e2d]">
+            <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
               {unlockedEndings.length} / {ENDING_ORDER.length}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
             {ENDING_ORDER.map((id) => {
               const ending = ENDINGS[id];
               const unlocked = unlockedEndings.includes(id);
@@ -81,29 +85,29 @@ export default function Codex() {
               return (
                 <div
                   key={id}
-                  className={`relative flex flex-col rounded-md border-2 p-5 transition-colors ${
+                  className={`relative flex flex-col rounded-md border-2 p-3 transition-colors md:p-5 ${
                     unlocked
                       ? "border-[#8a6a3d] bg-[#1a1208]"
                       : "border-[#2a1f12] bg-[#1a1208]/60"
                   }`}
                 >
-                  <div className="flex h-40 w-full items-center justify-center">
+                  <div className="flex h-24 w-full items-center justify-center md:h-32 lg:h-40">
                     <span
-                      className={`text-6xl ${unlocked ? "" : "opacity-30 grayscale"}`}
+                      className={`text-4xl md:text-5xl lg:text-6xl ${unlocked ? "" : "opacity-30 grayscale"}`}
                     >
                       {unlocked ? ending.icon : "🔒"}
                     </span>
                   </div>
                   <div className="mt-3 border-t border-[#3a2a1c] pt-3">
                     <p
-                      className={`text-sm ${
+                      className={`text-xs md:text-sm ${
                         unlocked ? "text-[#e8b86b]" : "text-[#5a4a2a]"
                       }`}
                     >
                       {unlocked ? ending.name : "???"}
                     </p>
                     <p
-                      className={`mt-1 text-[10px] leading-relaxed ${
+                      className={`mt-1 text-[9px] leading-relaxed md:text-[10px] ${
                         unlocked ? "text-[#a88a5a]" : "text-[#5a4a2a]"
                       }`}
                     >
@@ -117,20 +121,22 @@ export default function Codex() {
         </section>
 
         {/* NPC 섹션 */}
-        <section className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-8">
-          <div className="mb-6 flex items-end justify-between">
+        <section className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:p-8">
+          <div className="mb-5 flex items-end justify-between md:mb-6">
             <div>
-              <p className="text-xs tracking-[0.3em] text-[#6a4e2d]">
+              <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
                 CHARACTERS
               </p>
-              <h2 className="mt-2 text-2xl text-[#e8b86b]">마주친 자들</h2>
+              <h2 className="mt-2 text-xl text-[#e8b86b] md:text-2xl">
+                마주친 자들
+              </h2>
             </div>
-            <p className="text-xs tracking-[0.3em] text-[#6a4e2d]">
+            <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
               {npcUnlockedCount} / {NPC_ORDER.length}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
             {NPC_ORDER.map((npcId) => {
               const npc = NPCS[npcId];
               const unlocked = guessedTypes.includes(npc.type);
@@ -139,38 +145,40 @@ export default function Codex() {
               return (
                 <div
                   key={npcId}
-                  className={`relative flex flex-col rounded-md border p-5 transition-colors ${
+                  className={`relative flex flex-col rounded-md border p-3 transition-colors md:p-5 ${
                     unlocked
                       ? "border-[#3a2a1c] bg-[#1a1208] hover:border-[#8a6a3d]"
                       : "border-[#2a1f12] bg-[#1a1208]/60"
                   }`}
                 >
-                  <span className="absolute top-3 right-3 text-[9px] tracking-widest text-[#6a4e2d]">
+                  <span className="absolute top-2 right-2 text-[8px] tracking-widest text-[#6a4e2d] md:top-3 md:right-3 md:text-[9px]">
                     TIER {tier}
                   </span>
 
-                  <div className="flex h-48 w-full items-center justify-center">
+                  <div className="flex h-28 w-full items-center justify-center md:h-40 lg:h-48">
                     {unlocked ? (
                       <img
                         src={NPC_ICON[npcId]}
                         alt={npc.name}
-                        className="h-40 w-40 object-contain"
+                        className="h-24 w-24 object-contain md:h-32 md:w-32 lg:h-40 lg:w-40"
                       />
                     ) : (
-                      <span className="text-5xl text-[#5a4a2a]">🔒</span>
+                      <span className="text-4xl text-[#5a4a2a] md:text-5xl">
+                        🔒
+                      </span>
                     )}
                   </div>
 
                   <div className="mt-3 border-t border-[#3a2a1c] pt-3">
                     <p
-                      className={`text-sm ${
+                      className={`text-xs md:text-sm ${
                         unlocked ? "text-[#e8b86b]" : "text-[#5a4a2a]"
                       }`}
                     >
                       {unlocked ? npc.name : "???"}
                     </p>
                     <p
-                      className={`mt-1 text-[10px] leading-relaxed ${
+                      className={`mt-1 text-[9px] leading-relaxed md:text-[10px] ${
                         unlocked ? "text-[#a88a5a]" : "text-[#5a4a2a]"
                       }`}
                     >
