@@ -1,6 +1,5 @@
 import Onboarding from "./components/OnBoarding";
 import GameScreen from "./components/game/GameScreen";
-import NpcIntro from "./components/game/NpcIntro";
 import Battle from "./components/game/Battle";
 import GuessNpc from "./components/game/GuessNpc";
 import Ending from "./components/game/Ending";
@@ -30,7 +29,6 @@ export default function App() {
       <main className="flex min-h-screen flex-1 flex-col">
         {screen === "home" && <Home />}
         {screen === "playing" && <GameScreen />}
-        {screen === "intro" && <NpcIntro />}
         {screen === "battle" && <Battle />}
         {screen === "guess" && <GuessNpc />}
         {screen === "ending" && <Ending />}

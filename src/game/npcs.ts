@@ -92,7 +92,7 @@ export const NPCS: Record<NpcId, Npc> = {
   // [STAGE 3 · 변두리 · 어려움] 티탯 — 상대 직전 수를 따라함, 협력 유지가 핵심
   mentor: {
     id: "mentor",
-    name: "노상인",
+    name: "거리의 현자",
     title: "거리의 현자",
     intro: [
       "또 만났구려, 신참.",
@@ -130,7 +130,7 @@ export const NPCS: Record<NpcId, Npc> = {
 
   // [STAGE 4 · 대도시 · 고난도] 그러저 — 한 번이라도 배신 시 영원히 배신
   grudger: {
-    id: "grudger",
+    id: "avenger",
     name: "외팔이 대장장이",
     title: "한 번의 배신을 잊지 않는 자",
     intro: [
@@ -138,7 +138,7 @@ export const NPCS: Record<NpcId, Npc> = {
       "한 번이다. 한 번만 속이면,",
       "다시는 자네와 거래하지 않아.",
     ],
-    strategy: "grudger",
+    strategy: "hardGrudger",
     type: "avengerType",
     reactions: {
       CC: "...괜찮군.",
@@ -149,7 +149,7 @@ export const NPCS: Record<NpcId, Npc> = {
   },
   // [STAGE 4 · 대도시 · 고난도] 하드 그러저 — 2회 누적 배신 시 영원히 배신
   avenger: {
-    id: "avenger",
+    id: "grudger",
     name: "복면 용병",
     title: "복수의 칼날",
     intro: [
@@ -172,8 +172,8 @@ export const NPC_ICON: Record<NpcId, string> = {
   naive: Naive,
   cheater: Cheater,
   mentor: Mentor,
-  grudger: Grudger,
-  avenger: avenger,
+  avenger: Grudger,
+  grudger: avenger,
   jester: Jester,
   wanderer: Wanderer,
   baker: Baker,

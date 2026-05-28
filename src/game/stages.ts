@@ -31,7 +31,7 @@ export const STAGES: Stage[] = [
     area: "outskirts",
     areaLabel: "변두리",
     icon: "🛒",
-    npcPool: ["mentor", "wanderer"],
+    npcPool: ["mentor", "jester"],
     rounds: 5,
   },
   // 보통
@@ -41,7 +41,7 @@ export const STAGES: Stage[] = [
     area: "village",
     areaLabel: "마을",
     icon: "🪙",
-    npcPool: ["cheater", "baker"],
+    npcPool: ["cheater", "wanderer"],
     rounds: 5,
   },
   // 쉬움
@@ -51,7 +51,7 @@ export const STAGES: Stage[] = [
     area: "country",
     areaLabel: "시골",
     icon: "🌱",
-    npcPool: ["naive", "jester"],
+    npcPool: ["naive", "baker"],
     rounds: 5,
   },
 ];

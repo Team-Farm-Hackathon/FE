@@ -108,7 +108,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       battleHistory: [],
       currentEvent: drawEvent(),
       lastRoundPayoff: null,
-      screen: "intro",
+      screen: "battle",
     });
   },
 
