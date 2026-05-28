@@ -1,5 +1,9 @@
 import { useGameStore } from "../../store/useGameStore";
-import { ENDINGS, ENDING_ORDER } from "../../game/endings";
+import { ENDINGS } from "../../game/endings";
+import EndingCard from "./ending/EndingCard";
+import Epilogue from "./ending/Epilogue";
+import FinalLedger from "./ending/FinalLedger";
+import CollectionBar from "./ending/CollectionBar";
 
 export default function Ending() {
   const currentEnding = useGameStore((s) => s.currentEnding);
@@ -16,101 +20,54 @@ export default function Ending() {
 
   const ending = ENDINGS[currentEnding];
   const totalRounds = coopCount + defectCount;
-  const coopRate = totalRounds === 0 ? 0 : Math.round((coopCount / totalRounds) * 100);
-  const guessAccuracy =
-    guessAttempts === 0 ? 0 : Math.round((guessCorrect / guessAttempts) * 100);
+  const coopRate =
+    totalRounds === 0 ? 0 : Math.round((coopCount / totalRounds) * 100);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-[#1A1208]">
-      <div className="flex-1 overflow-y-auto px-5 py-5">
-        <h2 className="text-center text-sm tracking-[0.4em] text-[#e8b86b]">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden bg-[#0a0805]"
+      style={{
+        backgroundImage:
+          "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,184,107,0.18), transparent 60%), conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(232,184,107,0.05) 90deg, transparent 180deg, rgba(232,184,107,0.05) 270deg, transparent 360deg)",
+      }}
+    >
+      {/* 상단 헤더 */}
+      <header className="relative border-b border-[#3d2818] bg-[#0a0805]/80 py-3 text-center">
+        <p className="text-xs tracking-[0.6em] text-[#e8b86b]">
           ★ ENDING UNLOCKED ★
-        </h2>
+        </p>
+      </header>
 
-        <div className="mt-5 flex flex-col items-center gap-2 border-2 border-[#8a6a3d] bg-[#2a1d11] p-6">
-          <span className="text-5xl">{ending.icon}</span>
-          <h1 className="text-2xl tracking-widest text-[#e8b86b] drop-shadow-[2px_2px_0_#000]">
-            {ending.name}
-          </h1>
-          <p className="text-xs text-[#8a6a3d]">{ending.subtitle}</p>
-        </div>
-
-        <div className="mt-3 rounded border-2 border-[#8a6a3d] bg-[#1a1108] p-4">
-          <p className="text-sm leading-relaxed text-[#f5e6c8]">
-            "{ending.message}"
-          </p>
-        </div>
-
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <StatBox label="최종 골드" value={`${gold} 🪙`} />
-          <StatBox label="평판" value={`${reputation} ⭐`} />
-          <StatBox label="협력률" value={`${coopRate}%`} />
-          <StatBox label="추리 정확도" value={`${guessCorrect}/${guessAttempts}`} subtext={`${guessAccuracy}%`} />
-        </div>
-
-        <div className="mt-5">
-          <p className="text-[10px] tracking-widest text-[#8a6a3d]">
-            ENDING COLLECTION {unlockedEndings.length} / {ENDING_ORDER.length}
-          </p>
-          <div className="mt-2 grid grid-cols-4 gap-2">
-            {ENDING_ORDER.map((id) => {
-              const unlocked = unlockedEndings.includes(id);
-              const isCurrent = id === currentEnding;
-              return (
-                <div
-                  key={id}
-                  className={`flex aspect-square items-center justify-center border-2 ${
-                    isCurrent
-                      ? "border-[#e8b86b] bg-[#3d2818]"
-                      : unlocked
-                        ? "border-[#8a6a3d] bg-[#2a1d11]"
-                        : "border-[#3d2818] bg-[#1a1108]"
-                  }`}
-                >
-                  <span className="text-2xl">
-                    {unlocked ? ENDINGS[id].icon : "?"}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+      {/* 메인 */}
+      <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-y-auto p-6">
+        <div className="flex w-full max-w-6xl flex-col items-center justify-center gap-6 lg:flex-row lg:items-stretch lg:gap-8">
+          <Epilogue message={ending.message} />
+          <EndingCard ending={ending} />
+          <FinalLedger
+            gold={gold}
+            reputation={reputation}
+            coopRate={coopRate}
+            defectCount={defectCount}
+            guessCorrect={guessCorrect}
+            guessAttempts={guessAttempts}
+          />
         </div>
       </div>
 
-      <div className="border-t-2 border-[#3d2818] bg-[#1a1108] p-3">
-        <div className="flex gap-2">
-          <button
-            onClick={() => reset()}
-            className="flex-1 border-2 border-[#1a1108] bg-[#d9a04a] py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
-          >
-            ↻ 다 시 도 전
-          </button>
-          <button
-            disabled
-            className="border-2 border-[#3d2818] bg-transparent px-5 py-3 text-sm tracking-widest text-[#8a6a3d] opacity-60"
-          >
-            공 유
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+      {/* 하단 */}
+      <footer className="relative flex items-center justify-between gap-4 border-t border-[#3d2818] bg-[#0a0805]/80 px-6 py-4">
+        <CollectionBar
+          unlockedEndings={unlockedEndings}
+          currentEnding={currentEnding}
+        />
 
-function StatBox({
-  label,
-  value,
-  subtext,
-}: {
-  label: string;
-  value: string;
-  subtext?: string;
-}) {
-  return (
-    <div className="border-2 border-[#3d2818] bg-[#2a1d11] p-3">
-      <p className="text-[10px] tracking-widest text-[#8a6a3d]">{label}</p>
-      <p className="mt-1 text-xl text-[#e8b86b]">{value}</p>
-      {subtext && <p className="text-[10px] text-[#8a6a3d]">{subtext}</p>}
+        <button
+          onClick={() => reset()}
+          className="border-2 border-[#1a1108] bg-[#d9a04a] px-6 py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
+        >
+          ↻ 다 시 도 전
+        </button>
+      </footer>
     </div>
   );
 }

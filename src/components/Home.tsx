@@ -17,7 +17,7 @@ export default function Home() {
   const setScreen = useGameStore((s) => s.setScreen);
   const reset = useGameStore((s) => s.reset);
   const currentStage = useGameStore((s) => s.currentStage);
-  const unlockedStage = useGameStore((s) => s.unlockedStage);
+
   const reputation = useGameStore((s) => s.reputation);
   const coopCount = useGameStore((s) => s.coopCount);
   const defectCount = useGameStore((s) => s.defectCount);
@@ -31,7 +31,7 @@ export default function Home() {
 
   const dexCleared = guessedTypes.length;
   const dexTotal = 4;
-  const hasProgress = unlockedStage > 1 || totalRounds > 0;
+
 
   const onContinue = () => setScreen("playing");
   const onRestart = () => {
@@ -58,7 +58,6 @@ export default function Home() {
           <div className="mt-6 flex flex-wrap items-center gap-2 md:mt-8 md:gap-3">
             <button
               onClick={onContinue}
-              disabled={!hasProgress}
               className="border-2 border-[#1a1108] bg-[#6a8a4a] px-4 py-2 text-xs tracking-widest text-[#1a1108] transition-transform hover:bg-[#7a9a5a] active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 md:px-6 md:py-3 md:text-sm"
             >
               여 정 잇 기
@@ -67,7 +66,7 @@ export default function Home() {
               onClick={onRestart}
               className="border border-[#5a4a2a] px-4 py-2 text-xs text-[#c89a5a] transition-colors hover:border-[#e8b86b] hover:text-[#e8b86b] md:px-5 md:py-3 md:text-sm"
             >
-              처음부터
+              초기화
             </button>
           </div>
 

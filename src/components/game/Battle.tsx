@@ -56,7 +56,7 @@ export default function Battle() {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-[#1A1208]">
       <Header />
-      <div className="mx-4 my-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.5)] md:mx-8 md:my-6 md:flex-row lg:mx-12">
+      <div className="mx-4 my-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg bg-[#e8d9b5] shadow-[0_0_40px_rgba(0,0,0,0.5)] md:mx-8 md:my-6 md:flex-row lg:mx-12">
         <LeftPage
           npc={npc}
           eventId={currentEvent?.id ?? null}

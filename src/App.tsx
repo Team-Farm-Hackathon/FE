@@ -16,7 +16,7 @@ export default function App() {
   if (screen === "onboarding") {
     return (
       <Onboarding
-        onStart={() => setScreen("playing")}
+        onStart={() => setScreen("home")}
         endingsCleared={unlockedEndings.length}
         endingsTotal={4}
       />

@@ -22,14 +22,14 @@ export default function StageNode({ stage, status, onClick }: StageNodeProps) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className="flex flex-col items-center disabled:cursor-not-allowed"
+      className="flex flex-col items-center gap-2 disabled:cursor-not-allowed"
     >
       <div
         className={`flex h-16 w-16 items-center justify-center border-4 ${boxClass} shadow-[3px_3px_0_#000]`}
       >
         <span className="text-3xl">{disabled ? "🔒" : stage.icon}</span>
       </div>
-      <div className="mt-1 bg-[#1a1108] px-2 py-0.5 text-[10px] tracking-wider text-[#e8b86b]">
+      <div className="bg-[#1a1108] px-2 py-0.5 text-[10px] tracking-wider text-[#e8b86b]">
         STAGE {stage.id} {status === "cleared" ? "완료" : stage.name}
       </div>
     </button>

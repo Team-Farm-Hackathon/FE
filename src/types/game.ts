@@ -70,7 +70,15 @@ export type NpcTypeInfo = {
   icon: string;
 };
 
-export type EndingId = "sage" | "raider" | "naive" | "lunatic";
+export type EndingId =
+  | "sage"
+  | "observer"
+  | "outcast"
+  | "raider"
+  | "naive"
+  | "tightrope"
+  | "lunatic"
+  | "ordinary";
 
 export type Ending = {
   id: EndingId;
