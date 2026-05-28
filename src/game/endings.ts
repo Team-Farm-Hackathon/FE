@@ -33,9 +33,50 @@ export const ENDINGS: Record<EndingId, Ending> = {
     message:
       "예측 불가능한 당신, 도시는 당신을 두려워합니다. 어떤 거래도 약속이 되지 못했고, 당신은 누구의 친구도 적도 되지 못했다.",
   },
+  observer: {
+    id: "observer",
+    name: "관찰자의 길",
+    subtitle: "거래보다 관찰을 택한 자",
+    icon: "🔍",
+    message:
+      "당신은 흥정보다 관찰을 택했습니다. 모든 가면 너머의 얼굴을 읽어냈고, 누구도 당신 앞에서 자신을 숨길 수 없었다. — 도시는 당신을 '읽는 자'라 불렀다.",
+  },
+  tightrope: {
+    id: "tightrope",
+    name: "줄타기꾼의 길",
+    subtitle: "협력도 배신도 아닌 그 사이",
+    icon: "🎪",
+    message:
+      "협력도 배신도 아닌, 그 사이에서 균형을 찾았습니다. 당신은 어느 편에도 서지 않았지만, 어느 편도 당신을 적으로 두지 않았다. — 줄 위를 걷는 자의 평온.",
+  },
+  outcast: {
+    id: "outcast",
+    name: "추방자의 길",
+    subtitle: "도시는 당신을 기억에서 지웠다",
+    icon: "🚪",
+    message:
+      "쌓아온 신뢰는 모래처럼 흩어졌습니다. 골드도 칼도 남지 않았고, 거리의 누구도 당신의 이름을 부르지 않습니다. — 추방은 문이 아니라 침묵으로 시작되었다.",
+  },
+  ordinary: {
+    id: "ordinary",
+    name: "평범한 상인의 길",
+    subtitle: "특별하지 않아도, 거리는 흘러간다",
+    icon: "🧺",
+    message:
+      "전설도, 악명도 당신을 비껴갔습니다. 하루치 빵값을 벌고, 하루치 인사를 나누었지요. 누구의 이야기에도 주인공이 되지 못했지만 — 그 평범함이야말로 거리의 진짜 얼굴이었다.",
+  },
 };
 
-export const ENDING_ORDER: EndingId[] = ["sage", "raider", "naive", "lunatic"];
+export const ENDING_ORDER: EndingId[] = [
+  "sage",
+  "observer",
+  "outcast",
+  "raider",
+  "naive",
+  "tightrope",
+  "lunatic",
+  "ordinary",
+];
 
 // 게임 통계로부터 엔딩 판정 (우선순위 순으로 첫 매치)
 export function evaluateEnding(stats: GameStats): EndingId {
@@ -57,12 +98,28 @@ export function evaluateEnding(stats: GameStats): EndingId {
     return "sage";
   }
 
-  // 2. 약탈자: 배신률 60%↑
+  // 2. 관찰자: 추리 정확도 100% (시도 2회 이상) — 현자 요건은 못 채운 추리 마스터
+  if (stats.guessAttempts >= 2 && guessAccuracy === 1) {
+    return "observer";
+  }
+
+  // 3. 추방자: 평판 붕괴 (배신률과 무관하게 신뢰 자체가 무너진 경우)
+  if (stats.finalReputation <= 10) return "outcast";
+
+  // 4. 약탈자: 배신률 60%↑
   if (defectRate >= 0.6) return "raider";
 
-  // 3. 순진: 협력률 90%↑
+  // 5. 순진: 협력률 90%↑
   if (coopRate >= 0.9) return "naive";
 
-  // 4. 광인 (기본값)
-  return "lunatic";
+  // 6. 줄타기꾼: 협력률 40~60% + 평판 50↑ (의도적 균형 플레이)
+  if (coopRate >= 0.4 && coopRate <= 0.6 && stats.finalReputation >= 50) {
+    return "tightrope";
+  }
+
+  // 7. 광인 (기본값)
+  if (coopRate === 0.5 && defectRate === 0.5) {
+    return "lunatic";
+  }
+  return "ordinary";
 }
