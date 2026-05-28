@@ -4,26 +4,40 @@ import { NPCS, NPC_ICON } from "../game/npcs";
 import { ENDINGS, ENDING_ORDER } from "../game/endings";
 import type { NpcId } from "../types/game";
 
-const NPC_TIER: Record<NpcId, "I" | "II" | "III"> = {
+const NPC_TIER: Record<NpcId, "I" | "II" | "III" | "IV"> = {
   naive: "I",
-  jester: "I",
-  cheater: "II",
+  bard: "II",
   baker: "II",
+  jester: "II",
+  wanderer: "II",
+  mercenary: "III",
+  guildmaster: "III",
   mentor: "III",
-  wanderer: "III",
+  cheater: "III",
   grudger: "III",
   avenger: "III",
+  king: "IV",
+  noblewoman: "IV",
 };
 
 const NPC_ORDER: NpcId[] = [
+  // STAGE 1
   "naive",
-  "jester",
-  "cheater",
+  // STAGE 2
+  "bard",
   "baker",
-  "mentor",
+  "jester",
   "wanderer",
+  // STAGE 3
+  "mercenary",
+  "guildmaster",
+  "mentor",
+  "cheater",
   "grudger",
   "avenger",
+  // STAGE 4
+  "king",
+  "noblewoman",
 ];
 
 export default function Codex() {
