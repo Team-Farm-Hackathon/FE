@@ -2,14 +2,12 @@ import { SunSet } from "../assets";
 
 type OnboardingProps = {
   onStart?: () => void;
-  onContinue?: () => void;
   endingsCleared?: number;
   endingsTotal?: number;
 };
 
 export default function Onboarding({
   onStart,
-  onContinue,
   endingsCleared = 0,
   endingsTotal = 4,
 }: OnboardingProps) {
@@ -43,12 +41,6 @@ export default function Onboarding({
             className="border-2 border-[#1a1108] bg-[#d9a04a] py-3 text-sm text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5 md:py-4 md:text-base"
           >
             ▶ 시 작 하 다
-          </button>
-          <button
-            onClick={onContinue}
-            className="border-2 border-[#1a1108] bg-[#3d2818] py-3 text-sm text-[#d9c9a8] transition-transform hover:bg-[#4d3320] active:translate-y-0.5 md:py-4 md:text-base"
-          >
-            이 어 하 기
           </button>
         </div>
 

@@ -26,21 +26,23 @@ type Screen =
   | "codex";
 
 const ENDINGS_STORAGE_KEY = "tit-for-tat:unlockedEndings";
+const MET_NPCS_STORAGE_KEY = "tit-for-tat:metNpcs";
+const GUESSED_TYPES_STORAGE_KEY = "tit-for-tat:guessedTypes";
 
-function loadUnlockedEndings(): EndingId[] {
+function loadFromStorage<T>(key: string): T[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(ENDINGS_STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as EndingId[]) : [];
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T[]) : [];
   } catch {
     return [];
   }
 }
 
-function saveUnlockedEndings(endings: EndingId[]) {
+function saveToStorage<T>(key: string, value: T[]) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(ENDINGS_STORAGE_KEY, JSON.stringify(endings));
+    localStorage.setItem(key, JSON.stringify(value));
   } catch {
     // ignore
   }
@@ -57,6 +59,8 @@ type GameState = {
   currentEvent: GameEvent | null;
   lastRoundPayoff: PayoffResult | null;
   guessedTypes: NpcType[];
+  // 만났던 NPC (도감용, localStorage 영구 보존)
+  metNpcs: NpcId[];
   // 누적 통계 (엔딩 판정용)
   coopCount: number;
   defectCount: number;
@@ -89,22 +93,28 @@ export const useGameStore = create<GameState>((set, get) => ({
   battleHistory: [],
   currentEvent: null,
   lastRoundPayoff: null,
-  guessedTypes: [],
+  guessedTypes: loadFromStorage<NpcType>(GUESSED_TYPES_STORAGE_KEY),
+  metNpcs: loadFromStorage<NpcId>(MET_NPCS_STORAGE_KEY),
   coopCount: 0,
   defectCount: 0,
   guessAttempts: 0,
   guessCorrect: 0,
   currentEnding: null,
-  unlockedEndings: loadUnlockedEndings(),
+  unlockedEndings: loadFromStorage<EndingId>(ENDINGS_STORAGE_KEY),
 
   setScreen: (screen) => set({ screen }),
 
   selectStage: (stageId) => {
     const stage = STAGES.find((s) => s.id === stageId);
     if (!stage) return;
+    const npcId = pickNpcFromStage(stage);
+    const { metNpcs } = get();
+    const nextMet = metNpcs.includes(npcId) ? metNpcs : [...metNpcs, npcId];
+    if (nextMet !== metNpcs) saveToStorage(MET_NPCS_STORAGE_KEY, nextMet);
     set({
       currentStage: stageId,
-      currentNpcId: pickNpcFromStage(stage),
+      currentNpcId: npcId,
+      metNpcs: nextMet,
       battleHistory: [],
       currentEvent: drawEvent(),
       lastRoundPayoff: null,
@@ -172,9 +182,13 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     if (isCorrect) {
       updates.gold = gold + 5;
-      updates.guessedTypes = guessedTypes.includes(correctType)
+      const nextGuessed = guessedTypes.includes(correctType)
         ? guessedTypes
         : [...guessedTypes, correctType];
+      if (nextGuessed !== guessedTypes) {
+        saveToStorage(GUESSED_TYPES_STORAGE_KEY, nextGuessed);
+      }
+      updates.guessedTypes = nextGuessed;
     } else {
       updates.reputation = Math.max(0, reputation - 3);
     }
@@ -210,7 +224,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       const nextUnlocked = unlockedEndings.includes(endingId)
         ? unlockedEndings
         : [...unlockedEndings, endingId];
-      saveUnlockedEndings(nextUnlocked);
+      if (nextUnlocked !== unlockedEndings) {
+        saveToStorage(ENDINGS_STORAGE_KEY, nextUnlocked);
+      }
 
       set({
         currentEnding: endingId,
@@ -236,7 +252,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   reset: () => {
     // 도감은 유지하고 게임 데이터만 초기화
-    const keepUnlocked = get().unlockedEndings;
+    const { unlockedEndings, metNpcs, guessedTypes } = get();
     set({
       gold: 50,
       reputation: 50,
@@ -247,13 +263,14 @@ export const useGameStore = create<GameState>((set, get) => ({
       battleHistory: [],
       currentEvent: null,
       lastRoundPayoff: null,
-      guessedTypes: [],
+      guessedTypes,
+      metNpcs,
       coopCount: 0,
       defectCount: 0,
       guessAttempts: 0,
       guessCorrect: 0,
       currentEnding: null,
-      unlockedEndings: keepUnlocked,
+      unlockedEndings,
     });
   },
 }));

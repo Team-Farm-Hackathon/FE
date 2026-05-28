@@ -41,12 +41,11 @@ const NPC_ORDER: NpcId[] = [
 ];
 
 export default function Codex() {
-  const guessedTypes = useGameStore((s) => s.guessedTypes);
+  const metNpcs = useGameStore((s) => s.metNpcs);
   const unlockedEndings = useGameStore((s) => s.unlockedEndings);
 
-  const npcUnlockedCount = NPC_ORDER.filter((id) =>
-    guessedTypes.includes(NPCS[id].type),
-  ).length;
+  const npcUnlockedCount = NPC_ORDER.filter((id) => metNpcs.includes(id))
+    .length;
 
   return (
     <>
@@ -153,7 +152,7 @@ export default function Codex() {
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
             {NPC_ORDER.map((npcId) => {
               const npc = NPCS[npcId];
-              const unlocked = guessedTypes.includes(npc.type);
+              const unlocked = metNpcs.includes(npcId);
               const tier = NPC_TIER[npcId];
 
               return (
