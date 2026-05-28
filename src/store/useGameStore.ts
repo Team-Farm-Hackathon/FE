@@ -17,11 +17,13 @@ import { evaluateEnding } from "../game/endings";
 
 type Screen =
   | "onboarding"
+  | "home"
   | "playing"
   | "intro"
   | "battle"
   | "guess"
-  | "ending";
+  | "ending"
+  | "codex";
 
 const ENDINGS_STORAGE_KEY = "tit-for-tat:unlockedEndings";
 

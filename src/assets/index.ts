@@ -1,4 +1,5 @@
 export { default as avenger } from "./avenger.svg";
+export { default as Favicon } from "./favicon.png";
 export {default as Baker} from "./baker.svg";
 export {default as Cheater} from "./cheater.svg"
 export { default as Coin } from "./coin.svg";
