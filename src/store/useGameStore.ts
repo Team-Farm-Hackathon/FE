@@ -242,7 +242,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       reputation: 50,
       currentStage: 1,
       unlockedStage: 1,
-      screen: "onboarding",
+      screen: "home",
       currentNpcId: null,
       battleHistory: [],
       currentEvent: null,

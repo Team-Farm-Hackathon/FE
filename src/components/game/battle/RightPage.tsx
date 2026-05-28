@@ -32,7 +32,7 @@ export default function RightPage({
   const lastRound = history[history.length - 1];
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#e8d9b5] p-6 md:p-10">
+    <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <div className="mt-3 flex aspect-4/3 w-full items-center justify-center overflow-hidden rounded-md bg-linear-to-b from-[#8a9aa8] to-[#3d2818]">
         <img
           src={icon}

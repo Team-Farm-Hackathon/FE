@@ -14,7 +14,7 @@ export default function LeftPage({
   const event = eventId ? EVENT_INFO[eventId as keyof typeof EVENT_INFO] : null;
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#e8d9b5] p-6 md:p-10">
+    <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <h2 className="mt-2 text-2xl text-[#3d2818] md:text-3xl">{npc.name}</h2>
       <p className="mt-4 max-w-md text-sm leading-relaxed text-[#5a4326] md:text-[15px]">
         "{npc.intro[0]}" — {npc.title}.

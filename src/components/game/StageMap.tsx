@@ -15,32 +15,37 @@ export default function StageMap() {
         className="absolute inset-0 h-full w-full object-contain"
       />
 
-      <div className="relative z-10 grid h-full w-full grid-rows-4">
-        {STAGES.map((stage) => {
-          const status =
-            stage.id < unlockedStage
-              ? "cleared"
-              : stage.id === unlockedStage
-                ? "current"
-                : "locked";
+      <div className="relative z-10 grid h-full w-full grid-cols-4">
+        {[...STAGES]
+          .sort((a, b) => a.id - b.id)
+          .map((stage) => {
+            const status =
+              stage.id < unlockedStage
+                ? "cleared"
+                : stage.id === unlockedStage
+                  ? "current"
+                  : "locked";
 
-          return (
-            <section
-              key={stage.id}
-              className="relative flex w-full items-center justify-center"
-            >
-              <span className="absolute top-3 left-3 bg-[#1a1108]/80 px-2 py-0.5 text-[10px] tracking-widest text-[#e8b86b]">
-                {stage.areaLabel}
-              </span>
+            return (
+              <section
+                key={stage.id}
+                className="relative flex h-full flex-col items-center justify-center gap-6 md:gap-20"
+              >
+                <span className="absolute top-3 left-3 bg-[#1a1108]/80 px-2 py-0.5 text-[10px] tracking-widest text-[#e8b86b]">
+                  {stage.areaLabel}
+                </span>
 
-              <StageNode
-                stage={stage}
-                status={status}
-                onClick={() => selectStage(stage.id)}
-              />
-            </section>
-          );
-        })}
+                {Array.from({ length: stage.nodeCount }).map((_, idx) => (
+                  <StageNode
+                    key={idx}
+                    stage={stage}
+                    status={status}
+                    onClick={() => selectStage(stage.id)}
+                  />
+                ))}
+              </section>
+            );
+          })}
       </div>
     </div>
   );
