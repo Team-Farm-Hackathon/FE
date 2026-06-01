@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { useGameStore } from "../../store/useGameStore";
 import { ENDINGS } from "../../game/endings";
 import EndingCard from "./ending/EndingCard";
@@ -32,11 +33,26 @@ export default function Ending() {
       }}
     >
       {/* 상단 헤더 */}
-      <header className="relative border-b border-[#3d2818] bg-[#0a0805]/80 py-3 text-center">
-        <p className="text-xs tracking-[0.6em] text-[#e8b86b]">
+      <motion.header
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative border-b border-[#3d2818] bg-[#0a0805]/80 py-3 text-center"
+      >
+        <motion.p
+          animate={{
+            textShadow: [
+              "0 0 0px rgba(232,184,107,0)",
+              "0 0 18px rgba(232,184,107,0.8)",
+              "0 0 0px rgba(232,184,107,0)",
+            ],
+          }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          className="text-xs tracking-[0.6em] text-[#e8b86b]"
+        >
           ★ ENDING UNLOCKED ★
-        </p>
-      </header>
+        </motion.p>
+      </motion.header>
 
       {/* 메인 */}
       <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-y-auto p-6">
@@ -61,12 +77,17 @@ export default function Ending() {
           currentEnding={currentEnding}
         />
 
-        <button
+        <motion.button
           onClick={() => reset()}
-          className="border-2 border-[#1a1108] bg-[#d9a04a] px-6 py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, duration: 0.5 }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97, y: 2 }}
+          className="border-2 border-[#1a1108] bg-[#d9a04a] px-6 py-3 text-sm tracking-widest text-[#2a1d11] hover:bg-[#e8b86b]"
         >
           ↻ 다 시 도 전
-        </button>
+        </motion.button>
       </footer>
     </div>
   );

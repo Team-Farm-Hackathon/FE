@@ -28,10 +28,11 @@ export default function Archetypes({
       </p>
 
       <div className="mt-5 grid flex-1 grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
-        {TYPE_ORDER.map((typeId) => (
+        {TYPE_ORDER.map((typeId, idx) => (
           <ArchetypeCard
             key={typeId}
             typeId={typeId}
+            index={idx}
             selected={selected === typeId}
             disabled={result !== null}
             isCorrect={result !== null && typeId === correctType}
