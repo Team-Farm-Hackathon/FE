@@ -3,16 +3,11 @@ import Header from "./common/Header";
 import { Player } from "../assets";
 import { useGameStore } from "../store/useGameStore";
 import { STAGES } from "../game/stages";
-import { NPCS, NPC_ICON } from "../game/npcs";
+import { HOW_TO_PLAY } from "../game/play";
 
 const TOTAL_STAGES = STAGES.length;
-const STAGE_TIER: Record<number, "I" | "II" | "III"> = {
-  1: "I",
-  2: "II",
-  3: "III",
-  4: "III",
-};
-const STAGES_ASC = [...STAGES].sort((a, b) => a.id - b.id);
+
+
 
 export default function Home() {
   const setScreen = useGameStore((s) => s.setScreen);
@@ -23,7 +18,6 @@ export default function Home() {
   const coopCount = useGameStore((s) => s.coopCount);
   const defectCount = useGameStore((s) => s.defectCount);
   const guessCorrect = useGameStore((s) => s.guessCorrect);
-  const guessedTypes = useGameStore((s) => s.guessedTypes);
 
   const stage =
     STAGES.find((s) => s.id === currentStage) ?? STAGES[STAGES.length - 1];
@@ -31,9 +25,6 @@ export default function Home() {
   const coopRate =
     totalRounds > 0 ? Math.round((coopCount / totalRounds) * 100) : 0;
   const defectRate = totalRounds > 0 ? 100 - coopRate : 0;
-
-  const dexCleared = guessedTypes.length;
-  const dexTotal = 4;
 
   const onContinue = () => setScreen("playing");
   const onRestart = () => {
@@ -145,81 +136,95 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* 새로 만난 자들 (도감) */}
+        {/* 상인의 일지: 스토리 + 게임 방법 */}
         <motion.section
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
-          className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:col-span-2 md:p-8"
+          className="relative overflow-hidden rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:col-span-2 md:p-8"
         >
-          <div className="mb-4 flex items-end justify-between md:mb-5">
-            <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
-              새로 만난 자들
-            </p>
-            <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
-              DEX · {dexCleared} / {dexTotal}
+          {/* 양피지 질감 */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 20% 30%, #e8b86b 0, transparent 40%), radial-gradient(circle at 80% 70%, #e8b86b 0, transparent 40%)",
+            }}
+          />
+
+          <div className="relative mb-5 flex items-end justify-between md:mb-6">
+            <div>
+              <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
+                상 인 의 일 지
+              </p>
+              <h3 className="mt-1 text-xl text-[#e8b86b] md:text-2xl">
+                The Merchant's Journal
+              </h3>
+            </div>
+            <span className="hidden text-[10px] tracking-[0.3em] text-[#6a4e2d] md:inline md:text-xs">
+              CHAPTER · {currentStage} / {TOTAL_STAGES}
+            </span>
+          </div>
+
+          {/* 스토리 */}
+          <div className="relative border-l-2 border-[#5a4a2a] pl-4 md:pl-5">
+            <p className="text-sm leading-relaxed text-[#d9c9a8] italic md:text-base">
+              어둠이 짙어진 중세의 교역로. 항구와 시장, 길드의 회랑마다
+              <span className="text-[#e8b86b]"> 거래</span>가 오갔고 그 뒤엔
+              언제나 <span className="text-[#e8b86b]">선택</span>이 있었다.
+              누군가는 약속을 지켰고, 누군가는 등을 돌렸다.
+              <br className="hidden md:block" />
+              당신은 이제 막 길드의 인장을 받은 떠돌이 상인. 협력과 배신 사이,
+              어떤 이름으로 기억될 것인가?
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {STAGES_ASC.map((stageItem, idx) => {
-              const repNpcId = stageItem.npcPool[0];
-              const repNpc = NPCS[repNpcId];
-              const unlocked = guessedTypes.includes(repNpc.type);
-              const tier = STAGE_TIER[stageItem.id];
+          <div className="my-6 flex items-center gap-3 md:my-7">
+            <div className="h-px flex-1 bg-[#3a2a1c]" />
+            <span className="text-[10px] tracking-[0.4em] text-[#6a4e2d]">
+              + 거 래 의 규 칙 +
+            </span>
+            <div className="h-px flex-1 bg-[#3a2a1c]" />
+          </div>
 
-              return (
-                <motion.div
-                  key={stageItem.id}
-                  initial={{ opacity: 0, y: 18, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    delay: 0.3 + idx * 0.08,
-                    duration: 0.45,
-                    ease: "easeOut",
-                  }}
-                  whileHover={{ y: -3 }}
-                  className={`relative flex flex-col rounded-md border p-3 transition-colors md:p-5 ${
-                    unlocked
-                      ? "border-[#3a2a1c] bg-[#1a1208]"
-                      : "border-[#2a1f12] bg-[#1a1208]/60"
-                  }`}
-                >
-                  <div className="flex h-28 w-full items-center justify-center md:h-40 lg:h-56">
-                    {unlocked ? (
-                      <motion.img
-                        src={NPC_ICON[repNpcId]}
-                        alt={repNpc.name}
-                        initial={{ scale: 0.7, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{
-                          delay: 0.45 + idx * 0.08,
-                          duration: 0.5,
-                          ease: "backOut",
-                        }}
-                        className="h-24 w-24 object-contain md:h-32 md:w-32 lg:h-44 lg:w-44"
-                      />
-                    ) : (
-                      <span className="text-4xl text-[#5a4a2a] md:text-5xl">
-                        🔒
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-2">
-                    <p
-                      className={`text-xs md:text-sm ${
-                        unlocked ? "text-[#e8b86b]" : "text-[#5a4a2a]"
-                      }`}
-                    >
-                      {unlocked ? repNpc.name : "???"}
-                    </p>
-                    <p className="mt-0.5 text-[9px] tracking-widest text-[#6a4e2d] md:text-[10px]">
-                      TIER {tier}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
+          {/* 게임 방법 */}
+          <div className="relative grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+            {HOW_TO_PLAY.map((item, idx) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 18, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  delay: 0.3 + idx * 0.1,
+                  duration: 0.45,
+                  ease: "easeOut",
+                }}
+                whileHover={{ y: -3 }}
+                className="flex flex-col rounded-md border border-[#3a2a1c] bg-[#1a1208] p-4 md:p-5"
+              >
+                <div className="flex items-center gap-3">
+                  <motion.span
+                    initial={{ rotate: -20, scale: 0.7 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    transition={{
+                      delay: 0.45 + idx * 0.1,
+                      duration: 0.45,
+                      ease: "backOut",
+                    }}
+                    className="text-2xl md:text-3xl"
+                  >
+                    {item.icon}
+                  </motion.span>
+                  <p className="text-sm text-[#e8b86b] md:text-base">
+                    {item.title}
+                  </p>
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-[#a88a5a] md:text-sm">
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </motion.section>
       </div>
