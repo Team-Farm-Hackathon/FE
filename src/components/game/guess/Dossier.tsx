@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { NPCS, NPC_ICON } from "../../../game/npcs";
 import { CHOICE, type NpcId, type Round } from "../../../types/game";
 import RoundRow from "./RoundRow";
@@ -16,11 +17,21 @@ export default function Dossier({
   const myCoop = history.length - myDefect;
 
   return (
-    <section className="flex flex-col rounded-md border-2 border-[#3d2818] bg-[#2a1d11] p-5 md:w-100 md:shrink-0">
+    <motion.section
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="flex flex-col rounded-md border-2 border-[#3d2818] bg-[#2a1d11] p-5 md:w-100 md:shrink-0"
+    >
       <div className="mt-4 flex gap-4">
-        <div className="flex h-36 w-32 shrink-0 items-center justify-center overflow-hidden rounded-sm border-2 border-[#8a6a3d] bg-linear-to-b from-[#3d2818] to-[#1a1108]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.15, duration: 0.45, ease: "backOut" }}
+          className="flex h-36 w-32 shrink-0 items-center justify-center overflow-hidden rounded-sm border-2 border-[#8a6a3d] bg-linear-to-b from-[#3d2818] to-[#1a1108]"
+        >
           <img src={icon} alt={npc.name} className="h-28 w-28 object-contain" />
-        </div>
+        </motion.div>
         <div className="flex flex-col justify-center">
           <p className="text-xl text-[#e8b86b]">{npc.name}</p>
           <p className="mt-1 text-[10px] tracking-widest text-[#8a6a3d]">
@@ -43,10 +54,17 @@ export default function Dossier({
         지난 행동
       </p>
       <div className="mt-3 flex flex-col gap-1.5">
-        {history.map((r) => (
-          <RoundRow key={r.turn} round={r} />
+        {history.map((r, idx) => (
+          <motion.div
+            key={r.turn}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.25 + idx * 0.04, duration: 0.3 }}
+          >
+            <RoundRow round={r} />
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }

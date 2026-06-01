@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import Header from "./common/Header";
 import { Player } from "../assets";
 import { useGameStore } from "../store/useGameStore";
@@ -24,19 +25,19 @@ export default function Home() {
   const guessCorrect = useGameStore((s) => s.guessCorrect);
   const guessedTypes = useGameStore((s) => s.guessedTypes);
 
-  const stage = STAGES.find((s) => s.id === currentStage) ?? STAGES[STAGES.length - 1];
+  const stage =
+    STAGES.find((s) => s.id === currentStage) ?? STAGES[STAGES.length - 1];
   const totalRounds = coopCount + defectCount;
-  const coopRate = totalRounds > 0 ? Math.round((coopCount / totalRounds) * 100) : 0;
+  const coopRate =
+    totalRounds > 0 ? Math.round((coopCount / totalRounds) * 100) : 0;
   const defectRate = totalRounds > 0 ? 100 - coopRate : 0;
 
   const dexCleared = guessedTypes.length;
   const dexTotal = 4;
 
-
   const onContinue = () => setScreen("playing");
   const onRestart = () => {
     reset();
-    setScreen("playing");
   };
 
   return (
@@ -44,7 +45,12 @@ export default function Home() {
       <Header />
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 md:p-6">
         {/* 이어하기 */}
-        <section className="relative min-h-72 overflow-hidden rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:min-h-90 md:p-8 lg:p-10">
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="relative min-h-72 overflow-hidden rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:min-h-90 md:p-8 lg:p-10"
+        >
           <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
             이어 하기 · STAGE {currentStage} / {TOTAL_STAGES}
           </p>
@@ -70,15 +76,23 @@ export default function Home() {
             </button>
           </div>
 
-          <img
+          <motion.img
             src={Player}
             alt="player"
+            initial={{ opacity: 0, x: 30, rotate: -4 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
             className="absolute right-4 bottom-4 size-28 rounded-md bg-[#1a1208]/40 object-contain p-2 md:right-6 md:bottom-6 md:size-40 lg:right-8 lg:bottom-8 lg:size-50"
           />
-        </section>
+        </motion.section>
 
         {/* 나의 평판 */}
-        <section className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:min-h-90 md:p-8 lg:p-10">
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.4, ease: "easeOut" }}
+          className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:min-h-90 md:p-8 lg:p-10"
+        >
           <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
             나의 평판
           </p>
@@ -129,10 +143,15 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 새로 만난 자들 (도감) */}
-        <section className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:col-span-2 md:p-8">
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
+          className="rounded-lg border border-[#3a2a1c] bg-[#2a1d11] p-6 md:col-span-2 md:p-8"
+        >
           <div className="mb-4 flex items-end justify-between md:mb-5">
             <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d] md:text-xs">
               새로 만난 자들
@@ -143,15 +162,23 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {STAGES_ASC.map((stageItem) => {
+            {STAGES_ASC.map((stageItem, idx) => {
               const repNpcId = stageItem.npcPool[0];
               const repNpc = NPCS[repNpcId];
               const unlocked = guessedTypes.includes(repNpc.type);
               const tier = STAGE_TIER[stageItem.id];
 
               return (
-                <div
+                <motion.div
                   key={stageItem.id}
+                  initial={{ opacity: 0, y: 18, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    delay: 0.3 + idx * 0.08,
+                    duration: 0.45,
+                    ease: "easeOut",
+                  }}
+                  whileHover={{ y: -3 }}
                   className={`relative flex flex-col rounded-md border p-3 transition-colors md:p-5 ${
                     unlocked
                       ? "border-[#3a2a1c] bg-[#1a1208]"
@@ -160,9 +187,16 @@ export default function Home() {
                 >
                   <div className="flex h-28 w-full items-center justify-center md:h-40 lg:h-56">
                     {unlocked ? (
-                      <img
+                      <motion.img
                         src={NPC_ICON[repNpcId]}
                         alt={repNpc.name}
+                        initial={{ scale: 0.7, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{
+                          delay: 0.45 + idx * 0.08,
+                          duration: 0.5,
+                          ease: "backOut",
+                        }}
                         className="h-24 w-24 object-contain md:h-32 md:w-32 lg:h-44 lg:w-44"
                       />
                     ) : (
@@ -183,11 +217,11 @@ export default function Home() {
                       TIER {tier}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
-        </section>
+        </motion.section>
       </div>
     </>
   );

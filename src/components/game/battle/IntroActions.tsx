@@ -1,3 +1,5 @@
+import { AnimatePresence, motion } from "motion/react";
+
 export default function IntroActions({
   intro,
   introIdx,
@@ -14,28 +16,39 @@ export default function IntroActions({
       <div className="mt-6 rounded-md border border-[#c9b48a] bg-[#f5e6c8] p-4">
         <div className="mb-3 flex gap-1">
           {intro.map((_, i) => (
-            <span
+            <motion.span
               key={i}
-              className={`h-2 w-2 rounded-full transition-colors duration-300 ${
-                i <= introIdx ? "bg-[#3d2818]" : "bg-[#c9b48a]"
-              }`}
+              animate={{
+                backgroundColor: i <= introIdx ? "#3d2818" : "#c9b48a",
+                scale: i === introIdx ? 1.25 : 1,
+              }}
+              transition={{ duration: 0.25 }}
+              className="h-2 w-2 rounded-full"
             />
           ))}
         </div>
-        <p
-          key={introIdx}
-          className="animate-slide-in-right text-sm leading-relaxed text-[#3d2818] md:text-base"
-        >
-          "{intro[introIdx]}"
-        </p>
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={introIdx}
+            initial={{ opacity: 0, x: 18 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.28, ease: "easeOut" }}
+            className="text-sm leading-relaxed text-[#3d2818] md:text-base"
+          >
+            "{intro[introIdx]}"
+          </motion.p>
+        </AnimatePresence>
       </div>
 
-      <button
+      <motion.button
         onClick={onNext}
-        className="mt-4 w-full border-2 border-[#1a1108] bg-[#d9a04a] py-4 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5 md:py-5 md:text-base"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97, y: 2 }}
+        className="mt-4 w-full border-2 border-[#1a1108] bg-[#d9a04a] py-4 text-sm tracking-widest text-[#2a1d11] hover:bg-[#e8b86b] md:py-5 md:text-base"
       >
         {isLast ? "거 래 시 작 ▶" : "계 속 ▶"}
-      </button>
+      </motion.button>
     </>
   );
 }
