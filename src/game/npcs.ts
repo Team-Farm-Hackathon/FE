@@ -1,4 +1,4 @@
-import type { Npc, NpcId, NpcType, NpcTypeInfo } from "../types/game";
+import type { Npc, NpcId, NpcType, NpcTypeInfo, Strategy } from "../types/game";
 import {
   Naive,
   Cheater,
@@ -292,6 +292,42 @@ export const NPC_ICON: Record<NpcId, string> = {
   noblewoman: NobleWoman,
 };
 
+export const NPC_TIER: Record<NpcId, "I" | "II" | "III" | "IV"> = {
+  naive: "I",
+  bard: "II",
+  baker: "II",
+  jester: "II",
+  wanderer: "II",
+  mercenary: "III",
+  guildmaster: "III",
+  mentor: "III",
+  cheater: "III",
+  grudger: "III",
+  avenger: "III",
+  king: "IV",
+  noblewoman: "IV",
+};
+
+export const NPC_ORDER: NpcId[] = [
+  // STAGE 1
+  "naive",
+  // STAGE 2
+  "bard",
+  "baker",
+  "jester",
+  "wanderer",
+  // STAGE 3
+  "mercenary",
+  "guildmaster",
+  "mentor",
+  "cheater",
+  "grudger",
+  "avenger",
+  // STAGE 4
+  "king",
+  "noblewoman",
+];
+
 // 추리 카드용 4가지 유형 정보
 export const NPC_TYPES: Record<NpcType, NpcTypeInfo> = {
   naiveType: {
@@ -319,3 +355,39 @@ export const NPC_TYPES: Record<NpcType, NpcTypeInfo> = {
     icon: "🎲",
   },
 };
+
+export const STRATEGY_LABEL: Record<Strategy, { name: string; desc: string }> =
+  {
+    alwaysCooperate: {
+      name: "항상 협력",
+      desc: "어떤 상황에도 손을 내민다.",
+    },
+    alwaysDefect: {
+      name: "항상 배신",
+      desc: "조건 없이 등을 돌린다.",
+    },
+    titForTat: {
+      name: "팃포탯",
+      desc: "받은 그대로 돌려준다. 첫 거래는 협력.",
+    },
+    generousTitForTat: {
+      name: "관대한 팃포탯",
+      desc: "팃포탯이지만 가끔 한두 번은 용서한다.",
+    },
+    grudger: {
+      name: "그러저",
+      desc: "한 번이라도 배신당하면 영원히 배신.",
+    },
+    hardGrudger: {
+      name: "하드 그러저",
+      desc: "누적 배신 2회를 넘기면 영원히 배신.",
+    },
+    random: {
+      name: "변덕",
+      desc: "동전 던지기. 50/50 무작위.",
+    },
+    pavlov: {
+      name: "파블로프",
+      desc: "이긴 수는 그대로, 진 수는 뒤집어 낸다.",
+    },
+  };

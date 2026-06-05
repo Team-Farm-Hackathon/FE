@@ -1,51 +1,22 @@
 import Header from "./common/Header";
 import { useGameStore } from "../store/useGameStore";
-import { NPCS, NPC_ICON, NPC_TYPES } from "../game/npcs";
+import {
+  NPCS,
+  NPC_ICON,
+  NPC_ORDER,
+  NPC_TIER,
+  NPC_TYPES,
+  STRATEGY_LABEL,
+} from "../game/npcs";
 import { ENDINGS, ENDING_ORDER } from "../game/endings";
 import type { EndingId, NpcId } from "../types/game";
 import { useState } from "react";
-
-const NPC_TIER: Record<NpcId, "I" | "II" | "III" | "IV"> = {
-  naive: "I",
-  bard: "II",
-  baker: "II",
-  jester: "II",
-  wanderer: "II",
-  mercenary: "III",
-  guildmaster: "III",
-  mentor: "III",
-  cheater: "III",
-  grudger: "III",
-  avenger: "III",
-  king: "IV",
-  noblewoman: "IV",
-};
-
-const NPC_ORDER: NpcId[] = [
-  // STAGE 1
-  "naive",
-  // STAGE 2
-  "bard",
-  "baker",
-  "jester",
-  "wanderer",
-  // STAGE 3
-  "mercenary",
-  "guildmaster",
-  "mentor",
-  "cheater",
-  "grudger",
-  "avenger",
-  // STAGE 4
-  "king",
-  "noblewoman",
-];
 
 export default function Codex() {
   const metNpcs = useGameStore((s) => s.metNpcs);
   const unlockedEndings = useGameStore((s) => s.unlockedEndings);
   const [selectedEnding, setSelectedEnding] = useState<EndingId | null>(null);
-  const [selectedNpc,setSelectedNpc] = useState<NpcId|null>(null);
+  const [selectedNpc, setSelectedNpc] = useState<NpcId | null>(null);
   const npcUnlockedCount = NPC_ORDER.filter((id) =>
     metNpcs.includes(id),
   ).length;
@@ -93,10 +64,7 @@ export default function Codex() {
             </p>
           </div>
 
-          <div
-            className="grid cursor-pointer grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4"
-           
-          >
+          <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
             {ENDING_ORDER.map((id) => {
               const ending = ENDINGS[id];
               const unlocked = unlockedEndings.includes(id);
@@ -104,10 +72,11 @@ export default function Codex() {
               return (
                 <div
                   key={id}
-                  className={`relative flex flex-col rounded-md border-2 p-3 transition-colors md:p-5 ${
+                  onClick={() => setSelectedEnding(id)}
+                  className={`relative flex cursor-pointer flex-col rounded-md border-2 p-3 transition-colors md:p-5 ${
                     unlocked
-                      ? "border-[#8a6a3d] bg-[#1a1208]"
-                      : "border-[#2a1f12] bg-[#1a1208]/60"
+                      ? "border-[#8a6a3d] bg-[#1a1208] hover:border-[#e8b86b]"
+                      : "border-[#2a1f12] bg-[#1a1208]/60 hover:border-[#5a4a2a]"
                   }`}
                 >
                   <div className="flex h-24 w-full items-center justify-center md:h-32 lg:h-40">
@@ -164,10 +133,11 @@ export default function Codex() {
               return (
                 <div
                   key={npcId}
-                  className={`relative flex flex-col rounded-md border p-3 transition-colors md:p-5 ${
+                  onClick={() => setSelectedNpc(npcId)}
+                  className={`relative flex cursor-pointer flex-col rounded-md border p-3 transition-colors md:p-5 ${
                     unlocked
                       ? "border-[#3a2a1c] bg-[#1a1208] hover:border-[#8a6a3d]"
-                      : "border-[#2a1f12] bg-[#1a1208]/60"
+                      : "border-[#2a1f12] bg-[#1a1208]/60 hover:border-[#5a4a2a]"
                   }`}
                 >
                   <span className="absolute top-2 right-2 text-[8px] tracking-widest text-[#6a4e2d] md:top-3 md:right-3 md:text-[9px]">
@@ -211,99 +181,139 @@ export default function Codex() {
         </section>
 
         {/* 엔딩 상세 */}
-        {selectedEnding && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-            onClick={() => setSelectedEnding(null)}
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6 text-[#e8b86b] shadow-[0_0_40px_rgba(0,0,0,0.6)] md:p-8"
-            >
-              {selectedEnding && (
+        {selectedEnding &&
+          (() => {
+            const unlocked = unlockedEndings.includes(selectedEnding);
+            const ending = ENDINGS[selectedEnding];
+            return (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+                onClick={() => setSelectedEnding(null)}
+              >
                 <div
-                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-                  onClick={() => setSelectedEnding(null)}
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6 text-[#e8b86b] shadow-[0_0_40px_rgba(0,0,0,0.6)] md:p-8"
                 >
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6"
-                  >
-                    <span className="text-6xl">
-                      {ENDINGS[selectedEnding].icon}
+                  <div className="flex items-center gap-4">
+                    <span className="text-5xl md:text-6xl">
+                      {unlocked ? ending.icon : "🔒"}
                     </span>
-                    <h2 className="mt-3 text-2xl text-[#e8b86b]">
-                      {ENDINGS[selectedEnding].name}
-                    </h2>
-                    <p className="mt-1 text-sm text-[#a88a5a]">
-                      {ENDINGS[selectedEnding].subtitle}
-                    </p>
-                    <p className="mt-4 text-sm text-[#d9c9a8] italic">
-                      "{ENDINGS[selectedEnding].message}"
-                    </p>
+                    <div>
+                      <p className="text-[10px] tracking-[0.4em] text-[#8a6a3d]">
+                        ENDING
+                      </p>
+                      <h2 className="mt-1 text-2xl text-[#e8b86b] md:text-3xl">
+                        {unlocked ? ending.name : "???"}
+                      </h2>
+                      <p className="mt-1 text-xs text-[#a88a5a] italic md:text-sm">
+                        {unlocked ? ending.subtitle : "아직 걷지 않은 길."}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
-        {/* NPC 상세 */}
-           {selectedNpc && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-            onClick={() => setSelectedNpc(null)}
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6 text-[#e8b86b] shadow-[0_0_40px_rgba(0,0,0,0.6)] md:p-8"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={NPC_ICON[selectedNpc]}
-                  alt={NPCS[selectedNpc].name}
-                  className="h-24 w-24 object-contain md:h-28 md:w-28"
-                />
-                <div>
-                  <p className="text-[10px] tracking-[0.4em] text-[#8a6a3d]">
-                    CHARACTER · TIER {NPC_TIER[selectedNpc]}
-                  </p>
-                  <h2 className="mt-1 text-2xl text-[#e8b86b] md:text-3xl">
-                    {NPCS[selectedNpc].name}
-                  </h2>
-                  <p className="mt-1 text-xs text-[#a88a5a] italic md:text-sm">
-                    {NPCS[selectedNpc].title}
-                  </p>
+                  <hr className="my-5 border-[#3a2a1c]" />
+
+                  {unlocked ? (
+                    <p className="text-sm leading-relaxed text-[#d9c9a8] italic md:text-base">
+                      "{ending.message}"
+                    </p>
+                  ) : (
+                    <p className="text-sm leading-relaxed text-[#8a6a3d] italic md:text-base">
+                      아직 이 결말은 잠겨 있다. 다른 선택을 쌓아 새로운 길을
+                      열어보라.
+                    </p>
+                  )}
+
+                  <button
+                    onClick={() => setSelectedEnding(null)}
+                    className="mt-6 w-full border-2 border-[#1a1108] bg-[#d9a04a] py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
+                  >
+                    닫 기
+                  </button>
                 </div>
               </div>
+            );
+          })()}
 
-              <hr className="my-5 border-[#3a2a1c]" />
-
-              <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d]">유형</p>
-              <p className="mt-1 text-sm text-[#d9c9a8] md:text-base">
-                {NPC_TYPES[NPCS[selectedNpc].type].icon}{" "}
-                {NPC_TYPES[NPCS[selectedNpc].type].name} —{" "}
-                {NPC_TYPES[NPCS[selectedNpc].type].description}
-              </p>
-
-              <p className="mt-4 text-[10px] tracking-[0.3em] text-[#6a4e2d]">
-                대사
-              </p>
-              <ul className="mt-2 space-y-1 text-sm text-[#d9c9a8] italic">
-                {NPCS[selectedNpc].intro.map((line, i) => (
-                  <li key={i}>"{line}"</li>
-                ))}
-              </ul>
-
-              <button
+        {/* NPC 상세 */}
+        {selectedNpc &&
+          (() => {
+            const unlocked = metNpcs.includes(selectedNpc);
+            const npc = NPCS[selectedNpc];
+            const typeInfo = NPC_TYPES[npc.type];
+            const strategyInfo = STRATEGY_LABEL[npc.strategy];
+            return (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
                 onClick={() => setSelectedNpc(null)}
-                className="mt-6 w-full border-2 border-[#1a1108] bg-[#d9a04a] py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
               >
-                닫 기
-              </button>
-            </div>
-          </div>
-        )}
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6 text-[#e8b86b] shadow-[0_0_40px_rgba(0,0,0,0.6)] md:p-8"
+                >
+                  <div className="flex items-center gap-4">
+                    {unlocked ? (
+                      <img
+                        src={NPC_ICON[selectedNpc]}
+                        alt={npc.name}
+                        className="h-24 w-24 object-contain md:h-28 md:w-28"
+                      />
+                    ) : (
+                      <span className="flex h-24 w-24 items-center justify-center text-5xl md:h-28 md:w-28 md:text-6xl">
+                        🔒
+                      </span>
+                    )}
+                    <div>
+                      <p className="text-[10px] tracking-[0.4em] text-[#8a6a3d]">
+                        CHARACTER · TIER {NPC_TIER[selectedNpc]}
+                      </p>
+                      <h2 className="mt-1 text-2xl text-[#e8b86b] md:text-3xl">
+                        {unlocked ? npc.name : "???"}
+                      </h2>
+                      <p className="mt-1 text-xs text-[#a88a5a] italic md:text-sm">
+                        {unlocked ? npc.title : "아직 만나지 않은 자."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <hr className="my-5 border-[#3a2a1c]" />
+
+                  {unlocked ? (
+                    <>
+                      <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d]">
+                        유형
+                      </p>
+                      <p className="mt-1 text-sm text-[#d9c9a8] md:text-base">
+                        {typeInfo.icon} {typeInfo.name} — {typeInfo.description}
+                      </p>
+
+                      <p className="mt-4 text-[10px] tracking-[0.3em] text-[#6a4e2d]">
+                        전략
+                      </p>
+                      <p className="mt-1 text-sm text-[#e8b86b] md:text-base">
+                        {strategyInfo.name}
+                      </p>
+                      <p className="mt-1 text-xs leading-relaxed text-[#a88a5a] md:text-sm">
+                        {strategyInfo.desc}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm leading-relaxed text-[#8a6a3d] italic md:text-base">
+                      아직 마주치지 않은 자다. 여정을 이어가다 보면 어느
+                      길목에서 만나게 될 것이다.
+                    </p>
+                  )}
+
+                  <button
+                    onClick={() => setSelectedNpc(null)}
+                    className="mt-6 w-full border-2 border-[#1a1108] bg-[#d9a04a] py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
+                  >
+                    닫 기
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
       </div>
     </>
   );
