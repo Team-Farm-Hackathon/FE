@@ -1,8 +1,9 @@
 import Header from "./common/Header";
 import { useGameStore } from "../store/useGameStore";
-import { NPCS, NPC_ICON } from "../game/npcs";
+import { NPCS, NPC_ICON, NPC_TYPES } from "../game/npcs";
 import { ENDINGS, ENDING_ORDER } from "../game/endings";
-import type { NpcId } from "../types/game";
+import type { EndingId, NpcId } from "../types/game";
+import { useState } from "react";
 
 const NPC_TIER: Record<NpcId, "I" | "II" | "III" | "IV"> = {
   naive: "I",
@@ -43,9 +44,11 @@ const NPC_ORDER: NpcId[] = [
 export default function Codex() {
   const metNpcs = useGameStore((s) => s.metNpcs);
   const unlockedEndings = useGameStore((s) => s.unlockedEndings);
-
-  const npcUnlockedCount = NPC_ORDER.filter((id) => metNpcs.includes(id))
-    .length;
+  const [selectedEnding, setSelectedEnding] = useState<EndingId | null>(null);
+  const [selectedNpc,setSelectedNpc] = useState<NpcId|null>(null);
+  const npcUnlockedCount = NPC_ORDER.filter((id) =>
+    metNpcs.includes(id),
+  ).length;
 
   return (
     <>
@@ -90,7 +93,10 @@ export default function Codex() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
+          <div
+            className="grid cursor-pointer grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4"
+           
+          >
             {ENDING_ORDER.map((id) => {
               const ending = ENDINGS[id];
               const unlocked = unlockedEndings.includes(id);
@@ -203,6 +209,101 @@ export default function Codex() {
             })}
           </div>
         </section>
+
+        {/* 엔딩 상세 */}
+        {selectedEnding && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+            onClick={() => setSelectedEnding(null)}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6 text-[#e8b86b] shadow-[0_0_40px_rgba(0,0,0,0.6)] md:p-8"
+            >
+              {selectedEnding && (
+                <div
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+                  onClick={() => setSelectedEnding(null)}
+                >
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6"
+                  >
+                    <span className="text-6xl">
+                      {ENDINGS[selectedEnding].icon}
+                    </span>
+                    <h2 className="mt-3 text-2xl text-[#e8b86b]">
+                      {ENDINGS[selectedEnding].name}
+                    </h2>
+                    <p className="mt-1 text-sm text-[#a88a5a]">
+                      {ENDINGS[selectedEnding].subtitle}
+                    </p>
+                    <p className="mt-4 text-sm text-[#d9c9a8] italic">
+                      "{ENDINGS[selectedEnding].message}"
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* NPC 상세 */}
+           {selectedNpc && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+            onClick={() => setSelectedNpc(null)}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-lg rounded-lg border-2 border-[#8a6a3d] bg-[#2a1d11] p-6 text-[#e8b86b] shadow-[0_0_40px_rgba(0,0,0,0.6)] md:p-8"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src={NPC_ICON[selectedNpc]}
+                  alt={NPCS[selectedNpc].name}
+                  className="h-24 w-24 object-contain md:h-28 md:w-28"
+                />
+                <div>
+                  <p className="text-[10px] tracking-[0.4em] text-[#8a6a3d]">
+                    CHARACTER · TIER {NPC_TIER[selectedNpc]}
+                  </p>
+                  <h2 className="mt-1 text-2xl text-[#e8b86b] md:text-3xl">
+                    {NPCS[selectedNpc].name}
+                  </h2>
+                  <p className="mt-1 text-xs text-[#a88a5a] italic md:text-sm">
+                    {NPCS[selectedNpc].title}
+                  </p>
+                </div>
+              </div>
+
+              <hr className="my-5 border-[#3a2a1c]" />
+
+              <p className="text-[10px] tracking-[0.3em] text-[#6a4e2d]">유형</p>
+              <p className="mt-1 text-sm text-[#d9c9a8] md:text-base">
+                {NPC_TYPES[NPCS[selectedNpc].type].icon}{" "}
+                {NPC_TYPES[NPCS[selectedNpc].type].name} —{" "}
+                {NPC_TYPES[NPCS[selectedNpc].type].description}
+              </p>
+
+              <p className="mt-4 text-[10px] tracking-[0.3em] text-[#6a4e2d]">
+                대사
+              </p>
+              <ul className="mt-2 space-y-1 text-sm text-[#d9c9a8] italic">
+                {NPCS[selectedNpc].intro.map((line, i) => (
+                  <li key={i}>"{line}"</li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => setSelectedNpc(null)}
+                className="mt-6 w-full border-2 border-[#1a1108] bg-[#d9a04a] py-3 text-sm tracking-widest text-[#2a1d11] transition-transform hover:bg-[#e8b86b] active:translate-y-0.5"
+              >
+                닫 기
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
