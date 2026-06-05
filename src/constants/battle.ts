@@ -1,4 +1,4 @@
-import { CHOICE, type Choice, type NpcId } from "../../../types/game";
+import { CHOICE, type Choice, type NpcId } from "../types/game";
 
 export type Phase = "intro" | "choose" | "result";
 

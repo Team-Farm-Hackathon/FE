@@ -1,4 +1,4 @@
-import { CHOICE, type Round } from "../../../types/game";
+import { CHOICE, type Round } from "../../types/game";
 import ChoiceBadge from "./ChoiceBadge";
 
 export default function RoundRow({ round }: { round: Round }) {

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import { ENDINGS, ENDING_ORDER } from "../../../game/endings";
-import type { EndingId } from "../../../types/game";
+import { ENDINGS, ENDING_ORDER } from "../../constants/endings";
+import type { EndingId } from "../../types/game";
 
 export default function CollectionBar({
   unlockedEndings,

@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import type { Ending } from "../../../types/game";
+import type { Ending } from "../../types/game";
 
 export default function EndingCard({ ending }: { ending: Ending }) {
   return (

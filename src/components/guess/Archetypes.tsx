@@ -1,4 +1,4 @@
-import type { NpcType } from "../../../types/game";
+import type { NpcType } from "../../types/game";
 import ArchetypeCard from "./ArchetypeCard";
 import { TYPE_ORDER, type GuessResult } from "./constants";
 

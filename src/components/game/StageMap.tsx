@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useGameStore } from "../../store/useGameStore";
-import { STAGES } from "../../game/stages";
+import { STAGES } from "../../constants/stages";
 import StageNode from "./StageNode";
 import { Map } from "../../assets";
 

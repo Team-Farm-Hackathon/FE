@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import type { Stage } from "../../game/stages";
+import type { Stage } from "../../constants/stages";
 
 type NodeStatus = "locked" | "current" | "cleared";
 

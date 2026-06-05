@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
-import { NPC_TYPES } from "../../../game/npcs";
-import type { NpcType } from "../../../types/game";
+import { NPC_TYPES } from "../../constants/npcs";
+import type { NpcType } from "../../types/game";
 import type { GuessResult } from "./constants";
 
 export default function ActionBar({

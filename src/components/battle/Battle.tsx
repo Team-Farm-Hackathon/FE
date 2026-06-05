@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
-import { STAGES } from "../../game/stages";
-import { NPCS, NPC_ICON } from "../../game/npcs";
+import { STAGES } from "../../constants/stages";
+import { NPCS, NPC_ICON } from "../../constants/npcs";
 import { type Choice } from "../../types/game";
 import Header from "../common/Header";
-import { NPC_TIER, type Phase } from "./battle/constants";
-import LeftPage from "./battle/LeftPage";
-import RightPage from "./battle/RightPage";
+import { NPC_TIER, type Phase } from "../../constants/battle";
+import LeftPage from "./LeftPage";
+import RightPage from "./RightPage";
 
 export default function Battle() {
   const currentStage = useGameStore((s) => s.currentStage);

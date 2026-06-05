@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
-import { NPCS } from "../../game/npcs";
+import { NPCS } from "../../constants/npcs";
 import type { NpcType } from "../../types/game";
 import Header from "../common/Header";
-import Dossier from "./guess/Dossier";
-import Archetypes from "./guess/Archetypes";
-import ActionBar from "./guess/ActionBar";
-import type { GuessResult } from "./guess/constants";
+import Dossier from "../guess/Dossier";
+import Archetypes from "../guess/Archetypes";
+import ActionBar from "../guess/ActionBar";
+import type { GuessResult } from "../guess/constants";
 
 export default function GuessNpc() {
   const currentNpcId = useGameStore((s) => s.currentNpcId);

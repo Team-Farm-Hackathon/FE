@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
-import type { Npc, Round } from "../../../types/game";
-import { EVENT_INFO } from "../../../game/payoff";
+import type { Npc, Round } from "../../types/game";
+import { EVENT_INFO } from "../../constants/payoff";
 import HistoryRow from "./HistoryRow";
 
 export default function LeftPage({

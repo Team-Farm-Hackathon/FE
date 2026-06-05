@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { CHOICE, type Round } from "../../../types/game";
+import { CHOICE, type Round } from "../../types/game";
 
 export default function HistoryRow({
   round,

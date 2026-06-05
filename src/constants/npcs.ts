@@ -356,6 +356,7 @@ export const NPC_TYPES: Record<NpcType, NpcTypeInfo> = {
   },
 };
 
+// NPC 전략
 export const STRATEGY_LABEL: Record<Strategy, { name: string; desc: string }> =
   {
     alwaysCooperate: {
@@ -390,4 +391,4 @@ export const STRATEGY_LABEL: Record<Strategy, { name: string; desc: string }> =
       name: "파블로프",
       desc: "이긴 수는 그대로, 진 수는 뒤집어 낸다.",
     },
-  };
+};
