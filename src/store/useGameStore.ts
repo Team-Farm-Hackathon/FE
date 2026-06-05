@@ -9,11 +9,11 @@ import {
   type PayoffResult,
   type Round,
 } from "../types/game";
-import { STAGES, pickNpcFromStage } from "../game/stages";
-import { NPCS } from "../game/npcs";
-import { calcPayoff, drawEvent } from "../game/payoff";
-import { decideOppMove } from "../game/strategies";
-import { evaluateEnding } from "../game/endings";
+import { STAGES, pickNpcFromStage } from "../constants/stages";
+import { NPCS } from "../constants/npcs";
+import { calcPayoff, drawEvent } from "../constants/payoff";
+import { decideOppMove } from "../constants/strategies";
+import { evaluateEnding } from "../constants/endings";
 
 type Screen =
   | "onboarding"

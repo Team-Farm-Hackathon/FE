@@ -1,10 +1,10 @@
 import { motion } from "motion/react";
 import { useGameStore } from "../../store/useGameStore";
-import { ENDINGS } from "../../game/endings";
-import EndingCard from "./ending/EndingCard";
-import Epilogue from "./ending/Epilogue";
-import FinalLedger from "./ending/FinalLedger";
-import CollectionBar from "./ending/CollectionBar";
+import { ENDINGS } from "../../constants/endings";
+import EndingCard from "../ending/EndingCard";
+import Epilogue from "../ending/Epilogue";
+import FinalLedger from "../ending/FinalLedger";
+import CollectionBar from "../ending/CollectionBar";
 
 export default function Ending() {
   const currentEnding = useGameStore((s) => s.currentEnding);

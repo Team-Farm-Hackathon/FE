@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import { NPC_TYPES } from "../../../game/npcs";
-import type { NpcType } from "../../../types/game";
+import { NPC_TYPES } from "../../constants/npcs";
+import type { NpcType } from "../../types/game";
 import { TYPE_HINT } from "./constants";
 
 export default function ArchetypeCard({

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import { NPCS, NPC_ICON } from "../../../game/npcs";
-import { CHOICE, type NpcId, type Round } from "../../../types/game";
+import { NPCS, NPC_ICON } from "../../constants/npcs";
+import { CHOICE, type NpcId, type Round } from "../../types/game";
 import RoundRow from "./RoundRow";
 import StatBox from "./StatBox";
 

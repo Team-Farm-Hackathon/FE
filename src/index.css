@@ -37,3 +37,6 @@ body {
 .animate-dot-pop {
   animation: dot-pop 200ms ease-out;
 }
+button {
+  cursor:pointer
+}

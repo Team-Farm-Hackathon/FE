@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import type { Npc, PayoffResult, Round } from "../../../types/game";
-import { reactionKeyOf } from "./constants";
+import type { Npc, PayoffResult, Round } from "../../types/game";
+import { reactionKeyOf } from "../../constants/battle";
 import DeltaChip from "./DeltaChip";
 
 export default function ResultActions({

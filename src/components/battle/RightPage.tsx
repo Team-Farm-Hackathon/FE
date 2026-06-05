@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
-import type { Choice, Npc, PayoffResult, Round } from "../../../types/game";
-import type { Phase } from "./constants";
+import type { Choice, Npc, PayoffResult, Round } from "../../types/game";
+import type { Phase } from "../../constants/battle";
 import IntroActions from "./IntroActions";
 import ChooseActions from "./ChooseActions";
 import ResultActions from "./ResultActions";

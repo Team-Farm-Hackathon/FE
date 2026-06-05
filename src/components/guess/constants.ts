@@ -1,4 +1,4 @@
-import type { NpcType } from "../../../types/game";
+import type { NpcType } from "../../types/game";
 
 export type GuessResult = "correct" | "wrong" | null;
 

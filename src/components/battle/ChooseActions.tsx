@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { CHOICE, type Choice } from "../../../types/game";
+import { CHOICE, type Choice } from "../../types/game";
 
 export default function ChooseActions({
   onChoose,

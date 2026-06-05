@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import Onboarding from "./components/OnBoarding";
 import GameScreen from "./components/game/GameScreen";
-import Battle from "./components/game/Battle";
+import Battle from "./components/battle/Battle";
 import GuessNpc from "./components/game/GuessNpc";
 import Ending from "./components/game/Ending";
 import Sidebar from "./components/common/Sidebar";
